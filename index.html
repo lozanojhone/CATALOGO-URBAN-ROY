@@ -1,4 +1,5 @@
 <!doctype html>
+<!-- ROY Catalog Premium 2.3 - Buscador corregido -->
 <html lang="es">
 <head>
 <meta charset="utf-8">
@@ -7,7 +8,7 @@
 <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
 <meta http-equiv="Pragma" content="no-cache">
 <meta http-equiv="Expires" content="0">
-<meta name="app-version" content="ROY-CATALOG-2.0-20260728">
+<meta name="app-version" content="ROY-CATALOG-2.2-20260728">
 <meta name="referrer" content="strict-origin-when-cross-origin">
 <meta http-equiv="X-Content-Type-Options" content="nosniff">
 <title>ROY | Catálogo</title>
@@ -25,6 +26,7 @@
 header{position:sticky;top:0;z-index:50;background:rgba(8,8,8,.93);backdrop-filter:blur(14px);border-bottom:1px solid var(--line)}.header{height:82px;display:flex;align-items:center;gap:26px}.brand{display:flex;align-items:center;gap:13px;min-width:180px;color:#fff;text-decoration:none}.brand img{width:112px;height:52px;object-fit:contain}.brand-fallback{font:800 32px/1 'Barlow Condensed',sans-serif;letter-spacing:1px}.nav{display:flex;gap:25px;align-items:center;flex:1}.nav button{border:0;background:none;color:#fff;font:700 17px 'Barlow Condensed',sans-serif;text-transform:uppercase;letter-spacing:.5px;padding:12px 0}.nav button:hover,.nav button.active{color:var(--primary)}.actions{display:flex;gap:10px}.icon{width:44px;height:44px;border-radius:50%;display:grid;place-items:center;border:1px solid var(--line);background:#111;color:#fff;font-size:17px}.icon:hover{border-color:var(--primary);color:var(--primary)}
 .hero{min-height:430px;display:grid;place-items:center;position:relative;overflow:hidden;background:linear-gradient(100deg,rgba(0,0,0,.88),rgba(0,0,0,.25)),url('https://images.unsplash.com/photo-1523398002811-999ca8dec234?auto=format&fit=crop&w=1800&q=85') center/cover}.hero:after{content:"";position:absolute;inset:auto 0 0;height:90px;background:linear-gradient(transparent,var(--bg))}.hero-content{position:relative;z-index:1;width:min(1220px,calc(100% - 32px));padding:75px 0}.eyebrow{color:var(--primary);font-weight:800;letter-spacing:2px;text-transform:uppercase}.hero h1{font:800 clamp(48px,8vw,96px)/.88 'Barlow Condensed',sans-serif;text-transform:uppercase;max-width:760px;margin:12px 0 20px}.hero p{max-width:620px;color:#ddd;font-size:17px;line-height:1.7}.btn{border:0;border-radius:12px;padding:14px 20px;font-weight:800;text-transform:uppercase;display:inline-flex;align-items:center;justify-content:center;gap:9px}.btn-primary{background:var(--primary);color:#050505}.btn-primary:hover{filter:brightness(.93);transform:translateY(-1px)}
 .catalog{padding:62px 0 80px}.section-head{display:flex;justify-content:space-between;gap:24px;align-items:end;margin-bottom:25px}.section-head h2{font:800 clamp(34px,5vw,56px)/1 'Barlow Condensed',sans-serif;text-transform:uppercase;margin:0}.section-head h2 span{color:var(--primary)}.section-head p{color:var(--muted);margin:8px 0 0}.toolbar{display:grid;grid-template-columns:1fr 240px;gap:12px;margin-bottom:14px}.category-chips{display:flex;gap:9px;overflow-x:auto;padding:4px 1px 18px;scrollbar-width:thin}.category-chip{flex:0 0 auto;border:1px solid #353535;background:#121212;color:#fff;border-radius:999px;padding:10px 15px;font-weight:800;font-size:12px;text-transform:uppercase}.category-chip:hover,.category-chip.active{background:var(--primary);border-color:var(--primary);color:#050505}.official-link{white-space:nowrap;border:1px solid var(--primary)!important;border-radius:10px!important;padding:11px 14px!important;color:var(--primary)!important}.official-link:hover{background:var(--primary)!important;color:#050505!important}.field{height:52px;width:100%;border:1px solid #343434;border-radius:13px;background:#111;color:#fff;padding:0 16px;outline:0}.field:focus{border-color:var(--primary);box-shadow:0 0 0 3px color-mix(in srgb,var(--primary) 18%,transparent)}select.field{color-scheme:light;background:#fff;color:#050505;font-weight:800;cursor:pointer}select.field option{background:#fff;color:#050505;font-weight:700}
+.searching .card{animation:roySearchIn .18s ease both}@keyframes roySearchIn{from{opacity:.35;transform:translateY(5px)}to{opacity:1;transform:none}}.search-note{grid-column:1/-1;color:#bdbdbd;font-size:13px;margin-top:8px}.search-note b{color:var(--primary)}
 .grid{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:22px}.card{background:var(--panel);border:1px solid #202020;border-radius:18px;overflow:hidden;transition:.25s;position:relative}.card:hover{transform:translateY(-5px);border-color:#3c3c3c;box-shadow:var(--shadow)}.card-image{aspect-ratio:4/5;position:relative;overflow:hidden;background:#181818}.card-image img{width:100%;height:100%;object-fit:cover;transition:.45s}.card:hover .card-image img{transform:scale(1.045)}.tag{position:absolute;left:12px;top:12px;background:var(--primary);color:#050505;border-radius:999px;padding:7px 11px;font-size:11px;font-weight:800;text-transform:uppercase}.card-body{padding:17px}.brandline{color:var(--primary);font-size:11px;font-weight:800;letter-spacing:1.4px}.card h3{font:700 23px/1.05 'Barlow Condensed',sans-serif;margin:8px 0 12px;text-transform:uppercase}.price{font-size:21px;font-weight:800}.old{color:#777;text-decoration:line-through;font-size:13px;margin-left:8px}.card .btn{width:100%;margin-top:15px}.empty{grid-column:1/-1;padding:70px 20px;text-align:center;border:1px dashed #333;border-radius:18px;color:#aaa}.loader{grid-column:1/-1;display:grid;place-items:center;padding:80px 20px;color:#bbb}.spinner{width:42px;height:42px;border:4px solid #333;border-top-color:var(--primary);border-radius:50%;animation:spin .8s linear infinite;margin-bottom:12px}@keyframes spin{to{transform:rotate(360deg)}}
 footer{border-top:1px solid var(--line);background:#050505;padding:54px 0 25px}.footer-grid{display:grid;grid-template-columns:1.4fr 1fr 1fr;gap:40px}.footer-logo{max-width:150px;max-height:70px;object-fit:contain}.footer h4{font:700 22px 'Barlow Condensed',sans-serif;text-transform:uppercase;margin:0 0 14px}.footer p,.footer a{color:#aaa;line-height:1.7;text-decoration:none}.socials{display:flex;gap:10px;margin-top:18px}.socials a{width:44px;height:44px;display:grid;place-items:center;border-radius:50%;background:#151515;border:1px solid #2a2a2a;color:#fff}.socials a:hover{color:#050505;background:var(--primary);border-color:var(--primary)}.copy{border-top:1px solid #222;margin-top:36px;padding-top:22px;color:#777;font-size:13px;text-align:center}
 .modal{position:fixed;inset:0;z-index:100;background:rgba(0,0,0,.78);backdrop-filter:blur(6px);display:none;align-items:center;justify-content:center;padding:18px}.modal.open{display:flex}.modal-box{width:min(1040px,100%);max-height:94vh;overflow:auto;background:#101010;border:1px solid #333;border-radius:22px;box-shadow:var(--shadow);position:relative}.close{position:absolute;right:15px;top:15px;z-index:4;width:42px;height:42px;border-radius:50%;border:1px solid #333;background:rgba(0,0,0,.74);color:#fff;font-size:20px}.product-detail{display:grid;grid-template-columns:1.05fr .95fr}.gallery{padding:22px;background:#0b0b0b}.main-image{aspect-ratio:4/5;border-radius:16px;overflow:hidden;background:#191919}.main-image img{width:100%;height:100%;object-fit:cover}.thumbs{display:grid;grid-template-columns:repeat(5,1fr);gap:8px;margin-top:10px}.thumb{aspect-ratio:1;border:2px solid transparent;border-radius:10px;overflow:hidden;padding:0;background:#222}.thumb.active{border-color:var(--primary)}.thumb img{width:100%;height:100%;object-fit:cover}.info{padding:38px}.info .category{color:var(--primary);text-transform:uppercase;font-weight:800;font-size:12px;letter-spacing:1.5px}.info h2{font:800 clamp(35px,5vw,55px)/.94 'Barlow Condensed',sans-serif;text-transform:uppercase;margin:10px 0 15px}.description{color:#bbb;line-height:1.7}.label{display:block;font-weight:800;font-size:12px;text-transform:uppercase;letter-spacing:.7px;margin:22px 0 10px}.choices{display:flex;flex-wrap:wrap;gap:9px}.choice{min-width:46px;height:42px;padding:0 13px;border:1px solid #3a3a3a;background:#171717;color:#fff;border-radius:10px;font-weight:700}.choice:hover,.choice.selected{border-color:var(--primary);color:#050505;background:var(--primary)}.color-choice{height:45px;padding:0 14px}.qty{display:flex;align-items:center;width:max-content;border:1px solid #333;border-radius:10px;overflow:hidden}.qty button{width:44px;height:44px;background:#171717;border:0;color:#fff;font-size:20px}.qty span{width:50px;text-align:center;font-weight:800}.whatsapp{width:100%;margin-top:25px;background:#25d366;color:#061a0c;padding:17px 20px;font-size:15px}.whatsapp:hover{filter:brightness(.94)}.stock{margin-top:12px;font-size:12px;color:#999}.notice{margin-top:15px;padding:12px;border-radius:10px;background:#171717;color:#bbb;font-size:12px;line-height:1.5}
@@ -302,7 +304,7 @@ html.roy-ready body>*{visibility:visible}
 <section class="home-intro"><div class="wrap home-intro-grid"><article class="home-copy"><div class="eyebrow">EXPERIENCIA ROY</div><h2>Haz que tu presencia <span>hable por ti</span></h2><p>La moda urbana no solo se lleva: se vive. Encuentra prendas con carácter, combina tu estilo y crea un look auténtico para cada momento. Elige lo que te representa y pide directamente por WhatsApp.</p></article><aside class="home-card trust-card"><div class="trust-item"><i class="fa-solid fa-shield-heart"></i><b>Compra con confianza</b><span>Información clara antes de confirmar tu pedido.</span></div><div class="trust-item"><i class="fa-brands fa-whatsapp"></i><b>Atención directa</b><span>Consultas y confirmación personalizada por WhatsApp.</span></div><div class="trust-item"><i class="fa-solid fa-shirt"></i><b>Elige a tu gusto</b><span>Selecciona color, talla y cantidad antes de pedir.</span></div></aside></div></section>
 
 <section id="galleryPreview" class="gallery-preview"><div class="wrap"><div class="gallery-preview-head"><div><div class="eyebrow">GALERÍA ROY</div><h2>Looks reales para <span>inspirar tu estilo</span></h2><p>Descubre combinaciones, detalles y nuevas formas de llevar ROY. Te mostramos hasta tres publicaciones recientes; abre la galería completa para encontrar tu próximo outfit.</p></div><button class="btn btn-primary" onclick="openFullGallery()"><i class="fa-regular fa-images"></i> Ver galería completa</button></div><div id="mediaGrid" class="media-grid"><div class="media-empty">Cargando galería...</div></div></div></section>
-<main id="catalogo" class="wrap catalog catalog-gated"><div class="section-head"><div><h2>Catálogo <span id="catalogBrand">ROY</span></h2><p>Todo lo publicado desde el panel administrativo aparece aquí automáticamente.</p></div><div id="productCount" style="color:var(--muted)"></div></div><div class="toolbar"><input id="search" class="field" type="search" placeholder="Buscar producto, categoría o código..." oninput="renderProducts()"><select id="category" class="field" onchange="renderProducts()"><option value="">Todas las categorías</option></select></div><section id="products" class="grid"><div class="loader"><div><div class="spinner"></div>Cargando catálogo...</div></div></section></main>
+<main id="catalogo" class="wrap catalog catalog-gated"><div class="section-head"><div><h2>Catálogo <span id="catalogBrand">ROY</span></h2><p>Todo lo publicado desde el panel administrativo aparece aquí automáticamente.</p></div><div id="productCount" style="color:var(--muted)"></div></div><div class="toolbar"><input id="search" class="field" type="search" inputmode="search" autocomplete="off" spellcheck="false" placeholder="Buscar por producto, código, categoría, color o talla..."><select id="category" class="field" onchange="renderProducts()"><option value="">Todas las categorías</option></select></div><section id="products" class="grid"><div class="loader"><div><div class="spinner"></div>Cargando catálogo...</div></div></section></main>
 
 <section id="fullGallery" class="wrap" hidden><div class="view-title"><div><div class="eyebrow">GALERÍA ROY</div><h2>Descubre todos <span>nuestros looks</span></h2><p>Explora las imágenes y publicaciones cargadas desde el panel oficial de ROY. Inspírate, encuentra tu combinación favorita y luego abre el catálogo para pedirla.</p></div><button class="btn back-home" onclick="goHome()"><i class="fa-solid fa-arrow-left"></i> Volver al inicio</button></div><div id="fullMediaGrid" class="full-gallery-grid"><div class="media-empty">Cargando galería...</div></div></section>
 <footer class="footer"><div class="wrap footer-grid"><div><img id="footerLogo" class="footer-logo" src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAARQAAABbCAYAAACyCXp0AAAE3klEQVR4nO3dW5LbMAxE0VYqi5wlZpfKR+Iqx5HGoggSDfqe77FFyUQPSPkhAQAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAdNlmHejXrv3q335t88bV4+o5VTkfoNfUid4SKg9OxXhn/JLXOQAjTZ/oVUOl6riBmX7MPuCdIrvbGUQhTIBrpgeKVCtUCBPgupRAkWqECmECtEkLFMk7VAgToJ1FAbgVb+t4CBLgD6tCcChkhzEAVaUueV61Fmf08ocwAfpYBYqUFyqECdDPLlCk+aFCmAAxLANFmle0hAkQxzZQpLbivdOlECZALOtAkcaFCmECxLMPFGl8pxJ5fOCTlQgUKTZUVvxuFsBBmUCRYoqbMAHGKRUo0vUi7136ECZAu5+zDhS5Cfq1aRv5IcErYUKnA/xvWoeS/bb6q8/5bpy/du2ECXBs6pInMlQyCpVbzcD37L8CsqdTiQwAwqS2vcOI57x6jFHH7rua56btoTwbvQcSLTNMXl/8bdu2kRNihm3bmq9P5jnv+77fGfMozq9/ia+APCvoGV2AW2fiPJmuaj0H13POCJmIazFy3GW+ArJCR8MyJ9bo9rzF2TgiivPKc0Rci+2vnud4J/19KM6h4nA3x6nVnsUpSJ6NGNPVMJlxnAjpgSJ5hopDmDx8Sqi4Bsk7I1+fSmEimQSK5BUqLb9ZPGuZs1KoHJ1LxSB5uDv2d69ptTCRjAJF8ggVfgAdZ2YWZ4X9kiNWgSLlhUrLreysMFmhS6nanZxd+xHdSUSY9Dy+h12gSN7vgs3uTCqHSuWxzxB1JydqPHdYBoqUX7hHHMdUXU8BbY16jhM59hFdWtYS55VtoEheBewylpkFGFmY0ZPdoXiiVO9KnlkHiuRRyA5j6BU16SL3O0bdHZlxrKjnWylMpAKBIuUWtFOYVNi8PJI96V2v22phIhUJFCmnsJ3CpMendyd3RXcnj8f2br667JccKRMo0twCdwuT7P+yDhuQlZc6UVyD5KFUoEh+hT5D73+znuP2/Dd1n/x3ZJ5ThetZLlCk8aGySmgdbQC2GDGmyt1Jz1h6OC9xXpUMlJHcwiSqsGe36tkFMPp8Z51f9nVsVTZQ3ArfzetErLyZ6TD23r8dPRYXZQNlBLeQyt4AjFRhqXPHqKKvGCYSgWJrxEbsjElatRCk+2OPPOdK+yVHCJQPM3KyOix1KiyrnMfQq3SguC1RomTdJm49zqsZx3UUscRa5fqVDhT86+qk7J28LY9fvTuJePv8KmEiJf0uD86xEdv/2FlW/CxOLzqURbROzsz/yk7udkKEyTECxUiF3x56eFdQK4XOM5Y43yNQTPSEicPtzopaz5+u5D0CxUBGmEQ8/qzAKnQnhMkYbMomqrTEObPv//+Q+LZ5/6A7YTIOgZIkIkyiJuqIAHAMFYJkPAIlwQqdybOjLkXyCZWR72n5xND4Dnsok0WFSfRE7n2+swLMLLi7d1SuhMnqd2vuokOZJLIrqTaRq433WeWxZ6BDmaDKEmdUl1INn0+6jw5lgpYPMX4lf96xd9/jbD8Fn4FA+WvVTy7fcSUQVulGEKv8kocgyLF9I3tsyFM+UCIQSkCMJQKlJxAIEyDOEoEi3QsGwgSItUygSH8C4mpIECYAAAAAAAAAAAAAAAAAAAAAAACY7DcGMnlEg1E8GgAAAABJRU5ErkJggg==" alt="Logo ROY" onerror="useLogoFallback(this)"><h3 id="footerName" class="brand-fallback">ROY</h3><p id="footerDescription">Moda urbana, casual y oversize para destacar con identidad propia.</p><div class="socials"><a id="facebookLink" class="facebook" href="#" target="_blank" rel="noopener" aria-label="Facebook"><i class="fa-brands fa-facebook-f"></i></a><a id="instagramLink" class="instagram" href="#" target="_blank" rel="noopener" aria-label="Instagram"><i class="fa-brands fa-instagram"></i></a><a id="tiktokLink" class="tiktok" href="#" target="_blank" rel="noopener" aria-label="TikTok"><i class="fa-brands fa-tiktok"></i></a><a id="whatsappLink" class="whatsapp-social" href="#" target="_blank" rel="noopener" aria-label="WhatsApp"><i class="fa-brands fa-whatsapp"></i></a></div></div><div><h4>Contacto</h4><p id="footerPhone" class="contact-line"></p><p id="footerEmail" class="contact-line"></p><p id="footerHours" class="contact-line"></p><p id="footerContactName" class="contact-line"></p></div><div><h4>Ubicación</h4><p id="footerAddress" class="contact-line"></p><p id="footerCity" class="contact-line"></p><p>Pedidos y consultas por WhatsApp.</p></div></div><div class="wrap copy">© <span id="year"></span> <span id="copyName">ROY</span>. Todos los derechos reservados.</div></footer>
@@ -322,6 +324,20 @@ html.roy-ready body>*{visibility:visible}
   window.addEventListener('pageshow',e=>{if(e.persisted) location.reload()});
 })();
 </script>
+<script>
+(function(){
+  window.__royBootWatchdog=setTimeout(function(){
+    var boot=document.getElementById('royBoot');
+    document.documentElement.classList.remove('roy-loading');
+    document.documentElement.classList.add('roy-ready');
+    if(boot){boot.classList.add('hide');setTimeout(function(){if(boot&&boot.parentNode)boot.parentNode.removeChild(boot)},450)}
+    var products=document.getElementById('products');
+    if(products&&products.querySelector('.loader')){
+      products.innerHTML='<div class="empty">No se pudo completar la conexión automática. Verifica tu Internet y vuelve a actualizar.</div>';
+    }
+  },4500);
+})();
+</script>
 <script type="module">
 import {initializeApp} from 'https://www.gstatic.com/firebasejs/12.16.0/firebase-app.js';
 import {getFirestore,collection,getDocs,doc,getDoc,onSnapshot,getDocsFromServer,getDocFromServer} from 'https://www.gstatic.com/firebasejs/12.16.0/firebase-firestore.js';
@@ -330,11 +346,24 @@ const DEFAULT_OFFICIAL_STORE_URL='https://lozanojhone.github.io/ROY/#inicio';
 const firebaseConfig={apiKey:'AIzaSyBfVsL9sVnrGyu30Ek4KzhLRqORaAr4pkE',authDomain:'el-mashita.firebaseapp.com',projectId:'el-mashita',storageBucket:'el-mashita.firebasestorage.app',messagingSenderId:'667981540511',appId:'1:667981540511:web:08df9f8fb54128c9cd868aa'};
 const defaults={storeName:'ROY',whatsapp:'51926884544',email:'roycajamarca@gmail.com',hours:'Lunes a sábado: 8:00 AM a 8:00 PM',address:'Cajamarca, Perú',facebook:'',instagram:'',tiktok:'',logo:EMBEDDED_OFFICIAL_LOGO,officialStoreUrl:DEFAULT_OFFICIAL_STORE_URL,primaryColor:'#a8ff00',secondaryColor:'#ffffff',backgroundColor:'#080808',textColor:'#ffffff'};
 const state={products:[],rawProducts:[],categories:[],media:[],settings:{...defaults},selected:null,color:'',size:'',qty:1,activeImages:[],activeCategory:'',unsubscribers:[]};
-const categorySelect=$('#category');if(categorySelect){categorySelect.addEventListener('change',event=>{state.activeCategory=event.target.value;renderProducts();});}
 const $=s=>document.querySelector(s);const esc=v=>String(v??'').replace(/[&<>'"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;',"'":'&#39;','"':'&quot;'}[c]));
+const categorySelect=$('#category');if(categorySelect){categorySelect.addEventListener('change',event=>{state.activeCategory=event.target.value;renderProducts();});}
+const searchInput=$('#search');
+if(searchInput){
+ let searchTimer;
+ searchInput.addEventListener('input',()=>{
+  clearTimeout(searchTimer);
+  searchTimer=setTimeout(renderProducts,80);
+ });
+ searchInput.addEventListener('search',renderProducts);
+ searchInput.addEventListener('keydown',event=>{
+  if(event.key==='Escape'&&searchInput.value){searchInput.value='';renderProducts();searchInput.focus();}
+  if(event.key==='Enter'){event.preventDefault();renderProducts();}
+ });
+}
 const money=v=>'S/ '+Number(v||0).toFixed(2);const cleanPhone=v=>String(v||'').replace(/\D/g,'').replace(/^0+/,'');
 
-function revealApp(){const boot=document.getElementById('royBoot');document.documentElement.classList.remove('roy-loading');document.documentElement.classList.add('roy-ready');if(boot){boot.classList.add('hide');setTimeout(()=>boot.remove(),420)}}
+function revealApp(){if(window.__royBootWatchdog){clearTimeout(window.__royBootWatchdog);window.__royBootWatchdog=null}const boot=document.getElementById('royBoot');document.documentElement.classList.remove('roy-loading');document.documentElement.classList.add('roy-ready');if(boot){boot.classList.add('hide');setTimeout(()=>boot.remove(),420)}}
 setTimeout(revealApp,3200);
 function toast(msg){const t=$('#toast');t.textContent=msg;t.classList.add('show');clearTimeout(toast.timer);toast.timer=setTimeout(()=>t.classList.remove('show'),2600)}
 function usable(v){return typeof v==='string'&&v.trim()&&!v.startsWith('blob:')}
@@ -422,22 +451,45 @@ function fillCategories(){
  select.value=recovered||'';
  state.activeCategory=select.value;
 }
+function searchableText(value){
+ if(value==null)return '';
+ if(Array.isArray(value))return value.map(searchableText).join(' ');
+ if(typeof value==='object')return Object.entries(value).map(([k,v])=>k+' '+searchableText(v)).join(' ');
+ return String(value);
+}
 function renderProducts(){
  const search=$('#search'),select=$('#category');
  if(!search||!select)return;
- const q=norm(search.value);
+ const rawQuery=String(search.value||'').trim();
+ const q=norm(rawQuery);
+ const tokens=q.split(/\s+/).filter(Boolean);
  const chosen=select.value||state.activeCategory||'';
  const cat=norm(chosen);
  state.activeCategory=chosen;
+ document.body.classList.toggle('searching',Boolean(q));
  const list=state.products.filter(p=>{
   const productCategory=norm(p._categoryName||p.categoryName||p.category||'');
   const matchesCategory=!cat||productCategory===cat;
-  const haystack=norm([p.name,p._categoryName,p.categoryName,p.category,p.sku,p.code,p.brand,Array.isArray(p.tags)?p.tags.join(' '):p.tags].join(' '));
-  return matchesCategory&&(!q||haystack.includes(q));
+  const haystack=norm([
+   p.name,p.title,p._categoryName,p.categoryName,p.category,p.categoryId,
+   p.sku,p.code,p.codigo,p.brand,p.description,p.shortDescription,p.gender,p.genero,
+   p.material,p.fit,p.style,p.estilo,p.collection,p.coleccion,p.stock,p.price,p.oldPrice,
+   searchableText(p.tags),searchableText(p.colors),searchableText(p.sizes),
+   searchableText(p.specs),searchableText(p.specifications),searchableText(p.features)
+  ].join(' '));
+  const matchesSearch=!tokens.length||tokens.every(token=>haystack.includes(token));
+  return matchesCategory&&matchesSearch;
  });
  $('#productCount').textContent=list.length+' producto'+(list.length===1?'':'s');
- $('#products').innerHTML=list.length?list.map(card).join(''):'<div class="empty">No encontramos productos en esta categoría.</div>';
+ if(list.length){
+  $('#products').innerHTML=list.map(card).join('')+(q?`<div class="search-note">Resultados para <b>${esc(rawQuery)}</b>. Pulsa Esc para limpiar.</div>`:'');
+ }else{
+  const reason=q?`No encontramos productos para <b>${esc(rawQuery)}</b>${chosen?` dentro de <b>${esc(chosen)}</b>`:''}.`:`No hay productos disponibles en <b>${esc(chosen||'esta categoría')}</b>.`;
+  $('#products').innerHTML=`<div class="empty"><i class="fa-solid fa-magnifying-glass" style="font-size:30px;color:var(--primary);margin-bottom:12px"></i><br>${reason}<br><button class="btn btn-primary" style="margin-top:16px" onclick="clearCatalogFilters()">Mostrar todos</button></div>`;
+ }
 }
+window.clearCatalogFilters=()=>{const search=$('#search'),select=$('#category');if(search)search.value='';if(select)select.value='';state.activeCategory='';renderProducts();if(search)search.focus()};
+
 function card(p){const discount=Number(p.oldPrice)>Number(p.price),tag=(p.tags||[])[0];return `<article class="card"><div class="card-image" onclick="openProduct('${esc(p.id)}')"><img loading="lazy" src="${esc(productImages(p)[0])}" alt="${esc(p.name)}" onerror="this.src='https://placehold.co/800x1000/151515/ffffff?text=ROY'">${tag?`<span class="tag">${esc(tag)}</span>`:''}</div><div class="card-body"><div class="brandline">${esc(p.brand||state.settings.storeName||'ROY')}</div><h3>${esc(p.name)}</h3><span class="price">${money(p.price)}</span>${discount?`<span class="old">${money(p.oldPrice)}</span>`:''}<button class="btn btn-primary" onclick="openProduct('${esc(p.id)}')"><i class="fa-brands fa-whatsapp"></i> Ver y pedir</button></div></article>`}
 window.openProduct=id=>{const p=state.products.find(x=>String(x.id)===String(id));if(!p)return;state.selected=p;state.color=p.colors?.[0]||'Único';state.size=p.sizes?.[0]||'Única';state.qty=1;const price=Number(p.price||0),old=Number(p.oldPrice||0),discount=old>price?Math.round((1-price/old)*100):0;$('#modalSku').textContent='SKU: '+(p.sku||p.code||('ROY-'+String(p.id).slice(-10)));$('#modalRating').textContent='★★★★★ '+Number(p.rating||4.8).toFixed(1);$('#modalBrand').textContent=p.brand||state.settings.storeName||'ROY';$('#modalCategory').textContent=p._categoryName||'Producto';$('#modalName').textContent=p.name||'Producto';$('#modalPrice').textContent=money(price);$('#modalOldPrice').textContent=old>price?money(old):'';$('#modalDiscount').textContent=discount?'-'+discount+'%':'';$('#modalDiscount').classList.toggle('hidden',!discount);$('#modalDescription').textContent=p.description||'Diseño urbano, cómodo y fácil de combinar.';$('#modalStock').textContent=Number.isFinite(Number(p.stock))?'Stock disponible: '+p.stock:'';const specs=[['Categoría',p._categoryName||'Producto'],['Código',p.sku||p.code||('ROY-'+String(p.id).slice(-10))]];$('#specGrid').innerHTML=specs.map(([k,v])=>`<div class="spec-item"><b>${esc(k)}</b><span>${esc(v)}</span></div>`).join('');renderOptions();renderGallery();$('#productModal').classList.add('open');document.documentElement.style.overflow='hidden';document.body.style.overflow='hidden';$('#productModal').scrollTop=0};
 function colorVisual(name){const raw=String(name||'').trim();const key=raw.normalize('NFD').replace(/[\u0300-\u036f]/g,'').toLowerCase();const map={verde:['#239b43','#fff'],celeste:['#27b7e8','#07151b'],azul:['#1877f2','#fff'],gris:['#6b7280','#fff'],plomo:['#73777d','#fff'],rojo:['#e32636','#fff'],marron:['#7a4526','#fff'],cafe:['#70452d','#fff'],beige:['#e6d3ad','#17130d'],negro:['#111111','#fff'],blanco:['#ffffff','#111'],amarillo:['#f5cf25','#15120a'],naranja:['#f47b20','#fff'],rosado:['#ef77a8','#201018'],rosa:['#ef77a8','#201018'],morado:['#7b3fc6','#fff'],violeta:['#7851a9','#fff'],crema:['#f4ead2','#17130d'],vino:['#7b1835','#fff'],guinda:['#7b1835','#fff'],dorado:['#c89b2b','#151109'],plateado:['#b8bec7','#111'],turquesa:['#1cb7ad','#071513'],khaki:['#b6a06a','#15130d'],caqui:['#b6a06a','#15130d']};let pair=map[key];if(!pair){const css=raw.match(/^#(?:[0-9a-f]{3}|[0-9a-f]{6})$/i)?raw:'#d9dde3';pair=[css,'#111']}const hex=pair[0];let ring='rgba(141,245,0,.28)';if(/^#[0-9a-f]{6}$/i.test(hex)){const r=parseInt(hex.slice(1,3),16),g=parseInt(hex.slice(3,5),16),b=parseInt(hex.slice(5,7),16);ring=`rgba(${r},${g},${b},.30)`}return{bg:pair[0],text:pair[1],ring}}
