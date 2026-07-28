@@ -1,5 +1,5 @@
 <!doctype html>
-<!-- ROY Catalog Premium 2.5 - Buscador corregido -->
+<!-- ROY Catalog Premium 2.6 - Buscador corregido -->
 <html lang="es">
 <head>
 <meta charset="utf-8">
@@ -269,7 +269,8 @@ body[data-view="gallery"] #fullGallery{display:block!important;min-height:calc(1
 #royBoot .boot-inner{text-align:center;color:#fff}
 #royBoot .boot-line{width:120px;height:3px;margin:18px auto 0;border-radius:99px;background:linear-gradient(90deg,#a8ff00,#00e5ff,#a8ff00);background-size:200% 100%;animation:royBoot 1.1s linear infinite}
 @keyframes royBoot{to{background-position:-200% 0}}
-html.roy-loading body>*:not(#royBoot){visibility:hidden}
+html.roy-loading body>*:not(#royBoot){visibility:visible}
+#royBoot{pointer-events:none;background:rgba(0,0,0,.78)!important;backdrop-filter:blur(3px)}
 html.roy-ready body>*{visibility:visible}
 /* Botón de compra recordatorio, especialmente en móvil */
 @media(max-width:760px){
@@ -328,7 +329,7 @@ html.roy-ready body>*{visibility:visible}
 <div id="toast" class="toast"></div>
 <script>
 (function(){
-  const VERSION='roy-catalog-1.3-20260728';
+  const VERSION='roy-catalog-2.7-fast-home-20260728';
   try{
     const old=localStorage.getItem('roy_catalog_version');
     if(old!==VERSION){
@@ -351,9 +352,13 @@ html.roy-ready body>*{visibility:visible}
     if(products&&products.querySelector('.loader')){
       products.innerHTML='<div class="empty">No se pudo completar la conexión automática. Verifica tu Internet y vuelve a actualizar.</div>';
     }
-  },4500);
+  },1200);
 })();
 </script>
+<link rel="preconnect" href="https://www.gstatic.com" crossorigin>
+<link rel="preconnect" href="https://firestore.googleapis.com" crossorigin>
+<link rel="dns-prefetch" href="//www.gstatic.com">
+<link rel="dns-prefetch" href="//firestore.googleapis.com">
 <script type="module">
 import {initializeApp} from 'https://www.gstatic.com/firebasejs/12.16.0/firebase-app.js';
 import {getFirestore,collection,getDocs,doc,getDoc,onSnapshot,getDocsFromServer,getDocFromServer} from 'https://www.gstatic.com/firebasejs/12.16.0/firebase-firestore.js';
@@ -361,7 +366,7 @@ const EMBEDDED_OFFICIAL_LOGO='data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAARQA
 const DEFAULT_OFFICIAL_STORE_URL='https://lozanojhone.github.io/ROY/#inicio';
 const firebaseConfig={apiKey:'AIzaSyBfVsL9sVnrGyu30Ek4KzhLRqORaAr4pkE',authDomain:'el-mashita.firebaseapp.com',projectId:'el-mashita',storageBucket:'el-mashita.firebasestorage.app',messagingSenderId:'667981540511',appId:'1:667981540511:web:08df9f8fb54128c9cd868aa'};
 const defaults={storeName:'ROY',whatsapp:'51926884544',email:'roycajamarca@gmail.com',hours:'Lunes a sábado: 8:00 AM a 8:00 PM',address:'Cajamarca, Perú',facebook:'',instagram:'',tiktok:'',logo:EMBEDDED_OFFICIAL_LOGO,officialStoreUrl:DEFAULT_OFFICIAL_STORE_URL,primaryColor:'#a8ff00',secondaryColor:'#ffffff',backgroundColor:'#080808',textColor:'#ffffff'};
-const state={products:[],rawProducts:[],categories:[],media:[],settings:{...defaults},selected:null,color:'',size:'',qty:1,activeImages:[],activeCategory:'',unsubscribers:[]};
+const state={products:[],rawProducts:[],categories:[],media:[],productImageAssets:new Map(),settings:{...defaults},selected:null,color:'',size:'',qty:1,activeImages:[],activeCategory:'',unsubscribers:[]};
 const $=s=>document.querySelector(s);const esc=v=>String(v??'').replace(/[&<>'"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;',"'":'&#39;','"':'&quot;'}[c]));
 const categorySelect=$('#category');if(categorySelect){categorySelect.addEventListener('change',event=>{state.activeCategory=event.target.value;renderProducts();});}
 const searchInput=$('#search');
@@ -380,7 +385,8 @@ if(searchInput){
 const money=v=>'S/ '+Number(v||0).toFixed(2);const cleanPhone=v=>String(v||'').replace(/\D/g,'').replace(/^0+/,'');
 
 function revealApp(){if(window.__royBootWatchdog){clearTimeout(window.__royBootWatchdog);window.__royBootWatchdog=null}const boot=document.getElementById('royBoot');document.documentElement.classList.remove('roy-loading');document.documentElement.classList.add('roy-ready');if(boot){boot.classList.add('hide');setTimeout(()=>boot.remove(),420)}}
-setTimeout(revealApp,1600);
+// El inicio se muestra de inmediato; Firebase actualiza el contenido en segundo plano.
+requestAnimationFrame(()=>requestAnimationFrame(revealApp));
 function toast(msg){const t=$('#toast');t.textContent=msg;t.classList.add('show');clearTimeout(toast.timer);toast.timer=setTimeout(()=>t.classList.remove('show'),2600)}
 function officialBaseUrl(){
  try{return new URL(DEFAULT_OFFICIAL_STORE_URL).origin+new URL(DEFAULT_OFFICIAL_STORE_URL).pathname.replace(/[^/]*$/,'')}
@@ -431,13 +437,114 @@ function productImages(p,color=''){
  return list.length?list:['data:image/svg+xml;charset=UTF-8,'+encodeURIComponent(`<svg xmlns="http://www.w3.org/2000/svg" width="800" height="1000"><rect width="100%" height="100%" fill="#f2f2f2"/><text x="50%" y="48%" dominant-baseline="middle" text-anchor="middle" font-family="Arial" font-size="88" font-weight="700" fill="#111">ROY</text><text x="50%" y="57%" dominant-baseline="middle" text-anchor="middle" font-family="Arial" font-size="25" fill="#666">Imagen no disponible</text></svg>`)]
 }
 async function loadCollection(db,name){const snap=await getDocs(collection(db,name));return snap.docs.map(d=>({id:d.id,...d.data()}))}
-function rebuildProducts(){state.products=state.rawProducts.filter(p=>p.active!==false&&p.visible!==false).map(p=>({...p,colors:Array.isArray(p.colors)?p.colors:splitList(p.colors),sizes:Array.isArray(p.sizes)?p.sizes:splitList(p.sizes),gallery:p.gallery||p.images||p.productImages||[],colorImages:p.colorImages||p.imagesByColor||p.colorGallery||{},_categoryName:categoryNameForProduct(p)}));fillCategories();renderProducts()}
+function rebuildAssetMap(rows=[]){
+ state.productImageAssets=new Map();
+ rows.forEach(row=>{
+  const id=String(row.id||'').trim();
+  const data=typeof row.data==='string'?row.data.trim():'';
+  if(id&&data)state.productImageAssets.set(id,data);
+ });
+}
+function assetData(id){return id&&state.productImageAssets.get(String(id))||''}
+function hydrateProductAssets(product){
+ const p={...product};
+ const main=assetData(p.imageAssetId);
+ if(main)p.image=main;
+ if(Array.isArray(p.galleryAssetIds)){
+  const hydrated=p.galleryAssetIds.map(assetData).filter(Boolean);
+  if(hydrated.length)p.gallery=hydrated;
+ }
+ if(p.colorImageAssetIds&&typeof p.colorImageAssetIds==='object'){
+  const hydratedColors={};
+  Object.entries(p.colorImageAssetIds).forEach(([color,ids])=>{
+   const images=(Array.isArray(ids)?ids:[ids]).map(assetData).filter(Boolean);
+   if(images.length)hydratedColors[color]=images;
+  });
+  if(Object.keys(hydratedColors).length)p.colorImages=hydratedColors;
+ }
+ return p;
+}
+function rebuildProducts(){state.products=state.rawProducts.filter(p=>p.active!==false&&p.visible!==false).map(raw=>{const p=hydrateProductAssets(raw);return {...p,colors:Array.isArray(p.colors)?p.colors:splitList(p.colors),sizes:Array.isArray(p.sizes)?p.sizes:splitList(p.sizes),gallery:p.gallery||p.images||p.productImages||[],colorImages:p.colorImages||p.imagesByColor||p.colorGallery||{},_categoryName:categoryNameForProduct(p)}});fillCategories();renderProducts()}
 function stopRealtime(){state.unsubscribers.forEach(fn=>{try{fn()}catch(_){}});state.unsubscribers=[]}
-async function init(){try{const app=initializeApp(firebaseConfig),db=getFirestore(app);stopRealtime();const handleError=err=>{console.error('Firebase realtime:',err);toast('Conexión inestable. Se conservará la última información disponible.')};
-// Primera carga obligatoria desde el servidor para evitar mostrar datos antiguos del navegador.
-try{const [catSnap,prodSnap,mediaSnap,settingsSnap,settingsRowsSnap]=await Promise.all([getDocsFromServer(collection(db,'roy_categories')),getDocsFromServer(collection(db,'roy_products')),getDocsFromServer(collection(db,'roy_media')),getDocFromServer(doc(db,'roy_settings','main')),getDocsFromServer(collection(db,'roy_settings'))]);state.categories=catSnap.docs.map(d=>({id:d.id,...d.data()})).filter(c=>c.active!==false&&c.visible!==false);state.rawProducts=prodSnap.docs.map(d=>({id:d.id,...d.data()}));state.media=mediaSnap.docs.map(d=>({id:d.id,...d.data()})).filter(m=>m.active!==false&&m.visible!==false);const mergedSettings=Object.assign({},...settingsRowsSnap.docs.map(d=>d.data()),settingsSnap.exists()?settingsSnap.data():{});state.settings={...defaults,...mergedSettings};rebuildProducts();renderMediaPreview();applySettings();revealApp()}catch(serverErr){console.warn('Carga directa del servidor no disponible, usando sincronización en tiempo real:',serverErr)}
-// Después de la primera carga, mantener todo sincronizado en tiempo real.
-state.unsubscribers.push(onSnapshot(collection(db,'roy_categories'),{includeMetadataChanges:true},snap=>{if(snap.metadata.fromCache&&navigator.onLine)return;state.categories=snap.docs.map(d=>({id:d.id,...d.data()})).filter(c=>c.active!==false&&c.visible!==false);rebuildProducts()},handleError));state.unsubscribers.push(onSnapshot(collection(db,'roy_products'),{includeMetadataChanges:true},snap=>{if(snap.metadata.fromCache&&navigator.onLine)return;state.rawProducts=snap.docs.map(d=>({id:d.id,...d.data()}));rebuildProducts()},handleError));state.unsubscribers.push(onSnapshot(collection(db,'roy_media'),{includeMetadataChanges:true},snap=>{if(snap.metadata.fromCache&&navigator.onLine)return;state.media=snap.docs.map(d=>({id:d.id,...d.data()})).filter(m=>m.active!==false&&m.visible!==false);renderMediaPreview()},handleError));state.unsubscribers.push(onSnapshot(collection(db,'roy_settings'),{includeMetadataChanges:true},snap=>{if(snap.metadata.fromCache&&navigator.onLine)return;const rows=snap.docs.map(d=>({id:d.id,...d.data()}));const main=rows.find(r=>r.id==='main')||{};state.settings={...defaults,...Object.assign({},...rows,main)};applySettings();revealApp()},handleError))}catch(err){console.error(err);$('#products').innerHTML='<div class="empty"><i class="fa-solid fa-triangle-exclamation" style="font-size:34px;color:var(--primary);margin-bottom:15px"></i><br>No se pudo cargar el catálogo. Verifica Internet y que las reglas de Firestore permitan leer productos y configuración.</div>';$('#mediaGrid').innerHTML='<div class="media-empty">No se pudo cargar la galería.</div>';toast('No se pudo conectar con Firebase');applySettings();revealApp()}}
+async function init(){
+ try{
+  const app=initializeApp(firebaseConfig),db=getFirestore(app);
+  stopRealtime();
+  const handleError=err=>{console.error('Firebase realtime:',err);toast('Conexión inestable. Se conservará la última información disponible.')};
+
+  // 1) Mostrar siempre la portada principal inmediatamente.
+  applySettings();
+  revealApp();
+
+  // 2) Configuración primero: es liviana y actualiza logo, portada y contactos rápidamente.
+  getDocFromServer(doc(db,'roy_settings','main')).then(mainSnap=>{
+   if(mainSnap.exists()){
+    state.settings={...defaults,...mainSnap.data()};
+    applySettings();
+   }
+  }).catch(()=>{});
+
+  // 3) Productos, categorías e imágenes se descargan en paralelo sin bloquear el inicio.
+  const categoriesPromise=getDocsFromServer(collection(db,'roy_categories')).then(snap=>{
+   state.categories=snap.docs.map(d=>({id:d.id,...d.data()})).filter(c=>c.active!==false&&c.visible!==false);
+   rebuildProducts();
+  }).catch(err=>console.warn('Categorías:',err));
+
+  const productsPromise=getDocsFromServer(collection(db,'roy_products')).then(snap=>{
+   state.rawProducts=snap.docs.map(d=>({id:d.id,...d.data()}));
+   rebuildProducts();
+  }).catch(err=>console.warn('Productos:',err));
+
+  const assetsPromise=getDocsFromServer(collection(db,'roy_product_images')).then(snap=>{
+   rebuildAssetMap(snap.docs.map(d=>({id:d.id,...d.data()})));
+   rebuildProducts();
+  }).catch(err=>console.warn('Imágenes de productos:',err));
+
+  // 4) La galería es secundaria: cargarla al final para no retrasar la portada.
+  const loadMedia=()=>getDocsFromServer(collection(db,'roy_media')).then(snap=>{
+   state.media=snap.docs.map(d=>({id:d.id,...d.data()})).filter(m=>m.active!==false&&m.visible!==false);
+   renderMediaPreview();
+  }).catch(err=>console.warn('Galería:',err));
+  if('requestIdleCallback' in window) requestIdleCallback(loadMedia,{timeout:1200});
+  else setTimeout(loadMedia,120);
+
+  Promise.allSettled([categoriesPromise,productsPromise,assetsPromise]).then(()=>renderProducts());
+
+  // 5) Mantener todos los datos sincronizados en tiempo real.
+  state.unsubscribers.push(onSnapshot(collection(db,'roy_categories'),{includeMetadataChanges:true},snap=>{
+   if(snap.metadata.fromCache&&navigator.onLine)return;
+   state.categories=snap.docs.map(d=>({id:d.id,...d.data()})).filter(c=>c.active!==false&&c.visible!==false);
+   rebuildProducts();
+  },handleError));
+  state.unsubscribers.push(onSnapshot(collection(db,'roy_products'),{includeMetadataChanges:true},snap=>{
+   if(snap.metadata.fromCache&&navigator.onLine)return;
+   state.rawProducts=snap.docs.map(d=>({id:d.id,...d.data()}));
+   rebuildProducts();
+  },handleError));
+  state.unsubscribers.push(onSnapshot(collection(db,'roy_product_images'),{includeMetadataChanges:true},snap=>{
+   if(snap.metadata.fromCache&&navigator.onLine)return;
+   rebuildAssetMap(snap.docs.map(d=>({id:d.id,...d.data()})));
+   rebuildProducts();
+  },handleError));
+  state.unsubscribers.push(onSnapshot(collection(db,'roy_media'),{includeMetadataChanges:true},snap=>{
+   if(snap.metadata.fromCache&&navigator.onLine)return;
+   state.media=snap.docs.map(d=>({id:d.id,...d.data()})).filter(m=>m.active!==false&&m.visible!==false);
+   renderMediaPreview();
+  },handleError));
+  state.unsubscribers.push(onSnapshot(collection(db,'roy_settings'),{includeMetadataChanges:true},snap=>{
+   if(snap.metadata.fromCache&&navigator.onLine)return;
+   const rows=snap.docs.map(d=>({id:d.id,...d.data()}));
+   const main=rows.find(r=>r.id==='main')||{};
+   state.settings={...defaults,...Object.assign({},...rows,main)};
+   applySettings();
+  },handleError));
+ }catch(err){
+  console.error(err);
+  applySettings();
+  revealApp();
+  toast('La portada está disponible. Revisa tu conexión para cargar el catálogo.');
+ }
+}
 function splitList(v){return String(v||'').split(/[,\n]/).map(x=>x.trim()).filter(Boolean)}
 function firstSetting(paths,fallback=''){const s=state.settings||{};for(const path of paths){const parts=path.split('.');let v=s;for(const part of parts){v=v&&typeof v==='object'?v[part]:undefined}if(v!==undefined&&v!==null&&String(v).trim())return v}return fallback}
 function contactData(){return{whatsapp:firstSetting(['whatsapp','phone','telefono','contactPhone','contact.whatsapp','contact.phone','contacto.whatsapp','contacto.telefono'],defaults.whatsapp),email:firstSetting(['email','correo','contactEmail','contact.email','contacto.email'],defaults.email),hours:firstSetting(['hours','businessHours','horario','attentionHours','contact.hours','contacto.horario'],defaults.hours),address:firstSetting(['address','direccion','storeAddress','pickupAddress','location.address','contact.address','contacto.direccion'],defaults.address),city:firstSetting(['city','ciudad','location.city','contact.city','contacto.ciudad'],''),name:firstSetting(['contactName','ownerName','titular','contact.name','contacto.nombre'],'')}}
