@@ -269,8 +269,8 @@ body[data-view="gallery"] #fullGallery{display:block!important;min-height:calc(1
 #royBoot .boot-inner{text-align:center;color:#fff}
 #royBoot .boot-line{width:120px;height:3px;margin:18px auto 0;border-radius:99px;background:linear-gradient(90deg,#a8ff00,#00e5ff,#a8ff00);background-size:200% 100%;animation:royBoot 1.1s linear infinite}
 @keyframes royBoot{to{background-position:-200% 0}}
-html.roy-loading body>*:not(#royBoot){visibility:visible}
-#royBoot{pointer-events:none;background:rgba(0,0,0,.78)!important;backdrop-filter:blur(3px)}
+html.roy-loading body>*:not(#royBoot){visibility:hidden!important}
+#royBoot{pointer-events:auto;background:#050505!important;backdrop-filter:none}
 html.roy-ready body>*{visibility:visible}
 /* Botón de compra recordatorio, especialmente en móvil */
 @media(max-width:760px){
@@ -285,7 +285,7 @@ html.roy-ready body>*{visibility:visible}
 </style>
 
 <style id="roy-v20-final">
-/* ROY Catalog Premium 2.1 */
+/* ROY Catalog Premium 3.0 */
 #royBoot{background:#050505!important}
 #royBoot .boot-inner{display:grid;justify-items:center;gap:14px}
 #royBoot img{width:min(190px,48vw)!important;max-height:92px}
@@ -293,6 +293,11 @@ html.roy-ready body>*{visibility:visible}
 #royBoot .boot-dots::after{content:"";animation:royDots 1.05s steps(4,end) infinite}
 @keyframes royDots{0%{content:""}25%{content:"."}50%{content:".."}75%,100%{content:"..."}}
 #royBoot .boot-line{width:86px!important;height:2px!important;margin:2px auto 0!important}
+#royBoot .boot-status{max-width:310px;margin:0 auto;color:#cfd3d8;font:600 12px/1.45 Inter,system-ui,sans-serif}
+#royBoot .boot-retry{display:none;margin-top:4px;border:1px solid #8df500;border-radius:12px;background:#8df500;color:#071207;padding:11px 18px;font:900 12px/1 Inter,system-ui,sans-serif;cursor:pointer}
+#royBoot.error .boot-line{display:none}
+#royBoot.error .boot-retry{display:inline-flex}
+
 .clean-video{position:relative;background:#000!important;cursor:default!important}
 .clean-video video{width:100%;height:100%;object-fit:cover;background:#000;cursor:pointer}
 .clean-video::after{content:"ROY";position:absolute;right:10px;top:10px;z-index:2;padding:5px 8px;border-radius:999px;background:rgba(0,0,0,.58);color:#a8ff00;font:800 10px/1 Inter,sans-serif;letter-spacing:1px;pointer-events:none}
@@ -311,9 +316,19 @@ html.roy-ready body>*{visibility:visible}
 .main-image{background:#f1f1f1!important}
 @media(max-width:700px){.card-image:before{font-size:28px}}
 </style>
+
+<style id="roy-floating-whatsapp-v28">
+.floating-whatsapp{position:fixed;right:22px;bottom:22px;z-index:120;width:62px;height:62px;border:0;border-radius:50%;display:grid;place-items:center;background:linear-gradient(135deg,#25d366,#8df500);color:#07150b;font-size:30px;cursor:pointer;box-shadow:0 16px 36px rgba(37,211,102,.42),0 0 0 0 rgba(141,245,0,.35);transition:transform .2s ease,box-shadow .2s ease,filter .2s ease;animation:royWaPulse 2.6s infinite}
+.floating-whatsapp:hover{transform:translateY(-4px) scale(1.06);filter:saturate(1.15);box-shadow:0 20px 42px rgba(37,211,102,.52),0 0 0 9px rgba(141,245,0,.12)}
+.floating-whatsapp:active{transform:scale(.96)}
+.floating-whatsapp .wa-label{position:absolute;right:72px;white-space:nowrap;background:#fff;color:#111;border-radius:999px;padding:9px 13px;font:800 12px/1 Arial;box-shadow:0 10px 26px rgba(0,0,0,.22);opacity:0;transform:translateX(8px);pointer-events:none;transition:.2s ease}
+.floating-whatsapp:hover .wa-label{opacity:1;transform:translateX(0)}
+@keyframes royWaPulse{0%,70%,100%{box-shadow:0 16px 36px rgba(37,211,102,.42),0 0 0 0 rgba(141,245,0,.28)}80%{box-shadow:0 16px 36px rgba(37,211,102,.42),0 0 0 12px rgba(141,245,0,0)}}
+@media(max-width:760px){.floating-whatsapp{right:14px;bottom:calc(16px + env(safe-area-inset-bottom));width:58px;height:58px;font-size:28px;z-index:140}.floating-whatsapp .wa-label{display:none}}
+</style>
 </head>
 <body data-view="home">
-<div id="royBoot" role="status" aria-live="polite" aria-label="Cargando catálogo ROY"><div class="boot-inner"><img src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAARQAAABbCAYAAACyCXp0AAAE3klEQVR4nO3dW5LbMAxE0VYqi5wlZpfKR+Iqx5HGoggSDfqe77FFyUQPSPkhAQAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAdNlmHejXrv3q335t88bV4+o5VTkfoNfUid4SKg9OxXhn/JLXOQAjTZ/oVUOl6riBmX7MPuCdIrvbGUQhTIBrpgeKVCtUCBPgupRAkWqECmECtEkLFMk7VAgToJ1FAbgVb+t4CBLgD6tCcChkhzEAVaUueV61Fmf08ocwAfpYBYqUFyqECdDPLlCk+aFCmAAxLANFmle0hAkQxzZQpLbivdOlECZALOtAkcaFCmECxLMPFGl8pxJ5fOCTlQgUKTZUVvxuFsBBmUCRYoqbMAHGKRUo0vUi7136ECZAu5+zDhS5Cfq1aRv5IcErYUKnA/xvWoeS/bb6q8/5bpy/du2ECXBs6pInMlQyCpVbzcD37L8CsqdTiQwAwqS2vcOI57x6jFHH7rua56btoTwbvQcSLTNMXl/8bdu2kRNihm3bmq9P5jnv+77fGfMozq9/ia+APCvoGV2AW2fiPJmuaj0H13POCJmIazFy3GW+ArJCR8MyJ9bo9rzF2TgiivPKc0Rci+2vnud4J/19KM6h4nA3x6nVnsUpSJ6NGNPVMJlxnAjpgSJ5hopDmDx8Sqi4Bsk7I1+fSmEimQSK5BUqLb9ZPGuZs1KoHJ1LxSB5uDv2d69ptTCRjAJF8ggVfgAdZ2YWZ4X9kiNWgSLlhUrLreysMFmhS6nanZxd+xHdSUSY9Dy+h12gSN7vgs3uTCqHSuWxzxB1JydqPHdYBoqUX7hHHMdUXU8BbY16jhM59hFdWtYS55VtoEheBewylpkFGFmY0ZPdoXiiVO9KnlkHiuRRyA5j6BU16SL3O0bdHZlxrKjnWylMpAKBIuUWtFOYVNi8PJI96V2v22phIhUJFCmnsJ3CpMendyd3RXcnj8f2br667JccKRMo0twCdwuT7P+yDhuQlZc6UVyD5KFUoEh+hT5D73+znuP2/Dd1n/x3ZJ5ThetZLlCk8aGySmgdbQC2GDGmyt1Jz1h6OC9xXpUMlJHcwiSqsGe36tkFMPp8Z51f9nVsVTZQ3ArfzetErLyZ6TD23r8dPRYXZQNlBLeQyt4AjFRhqXPHqKKvGCYSgWJrxEbsjElatRCk+2OPPOdK+yVHCJQPM3KyOix1KiyrnMfQq3SguC1RomTdJm49zqsZx3UUscRa5fqVDhT86+qk7J28LY9fvTuJePv8KmEiJf0uD86xEdv/2FlW/CxOLzqURbROzsz/yk7udkKEyTECxUiF3x56eFdQK4XOM5Y43yNQTPSEicPtzopaz5+u5D0CxUBGmEQ8/qzAKnQnhMkYbMomqrTEObPv//+Q+LZ5/6A7YTIOgZIkIkyiJuqIAHAMFYJkPAIlwQqdybOjLkXyCZWR72n5xND4Dnsok0WFSfRE7n2+swLMLLi7d1SuhMnqd2vuokOZJLIrqTaRq433WeWxZ6BDmaDKEmdUl1INn0+6jw5lgpYPMX4lf96xd9/jbD8Fn4FA+WvVTy7fcSUQVulGEKv8kocgyLF9I3tsyFM+UCIQSkCMJQKlJxAIEyDOEoEi3QsGwgSItUygSH8C4mpIECYAAAAAAAAAAAAAAAAAAAAAAACY7DcGMnlEg1E8GgAAAABJRU5ErkJggg==" alt="ROY"><div class="boot-text">Cargando<span class="boot-dots"></span></div><div class="boot-line"></div></div></div>
+<div id="royBoot" role="status" aria-live="polite" aria-label="Cargando catálogo ROY"><div class="boot-inner"><img src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAARQAAABbCAYAAACyCXp0AAAE3klEQVR4nO3dW5LbMAxE0VYqi5wlZpfKR+Iqx5HGoggSDfqe77FFyUQPSPkhAQAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAdNlmHejXrv3q335t88bV4+o5VTkfoNfUid4SKg9OxXhn/JLXOQAjTZ/oVUOl6riBmX7MPuCdIrvbGUQhTIBrpgeKVCtUCBPgupRAkWqECmECtEkLFMk7VAgToJ1FAbgVb+t4CBLgD6tCcChkhzEAVaUueV61Fmf08ocwAfpYBYqUFyqECdDPLlCk+aFCmAAxLANFmle0hAkQxzZQpLbivdOlECZALOtAkcaFCmECxLMPFGl8pxJ5fOCTlQgUKTZUVvxuFsBBmUCRYoqbMAHGKRUo0vUi7136ECZAu5+zDhS5Cfq1aRv5IcErYUKnA/xvWoeS/bb6q8/5bpy/du2ECXBs6pInMlQyCpVbzcD37L8CsqdTiQwAwqS2vcOI57x6jFHH7rua56btoTwbvQcSLTNMXl/8bdu2kRNihm3bmq9P5jnv+77fGfMozq9/ia+APCvoGV2AW2fiPJmuaj0H13POCJmIazFy3GW+ArJCR8MyJ9bo9rzF2TgiivPKc0Rci+2vnud4J/19KM6h4nA3x6nVnsUpSJ6NGNPVMJlxnAjpgSJ5hopDmDx8Sqi4Bsk7I1+fSmEimQSK5BUqLb9ZPGuZs1KoHJ1LxSB5uDv2d69ptTCRjAJF8ggVfgAdZ2YWZ4X9kiNWgSLlhUrLreysMFmhS6nanZxd+xHdSUSY9Dy+h12gSN7vgs3uTCqHSuWxzxB1JydqPHdYBoqUX7hHHMdUXU8BbY16jhM59hFdWtYS55VtoEheBewylpkFGFmY0ZPdoXiiVO9KnlkHiuRRyA5j6BU16SL3O0bdHZlxrKjnWylMpAKBIuUWtFOYVNi8PJI96V2v22phIhUJFCmnsJ3CpMendyd3RXcnj8f2br667JccKRMo0twCdwuT7P+yDhuQlZc6UVyD5KFUoEh+hT5D73+znuP2/Dd1n/x3ZJ5ThetZLlCk8aGySmgdbQC2GDGmyt1Jz1h6OC9xXpUMlJHcwiSqsGe36tkFMPp8Z51f9nVsVTZQ3ArfzetErLyZ6TD23r8dPRYXZQNlBLeQyt4AjFRhqXPHqKKvGCYSgWJrxEbsjElatRCk+2OPPOdK+yVHCJQPM3KyOix1KiyrnMfQq3SguC1RomTdJm49zqsZx3UUscRa5fqVDhT86+qk7J28LY9fvTuJePv8KmEiJf0uD86xEdv/2FlW/CxOLzqURbROzsz/yk7udkKEyTECxUiF3x56eFdQK4XOM5Y43yNQTPSEicPtzopaz5+u5D0CxUBGmEQ8/qzAKnQnhMkYbMomqrTEObPv//+Q+LZ5/6A7YTIOgZIkIkyiJuqIAHAMFYJkPAIlwQqdybOjLkXyCZWR72n5xND4Dnsok0WFSfRE7n2+swLMLLi7d1SuhMnqd2vuokOZJLIrqTaRq433WeWxZ6BDmaDKEmdUl1INn0+6jw5lgpYPMX4lf96xd9/jbD8Fn4FA+WvVTy7fcSUQVulGEKv8kocgyLF9I3tsyFM+UCIQSkCMJQKlJxAIEyDOEoEi3QsGwgSItUygSH8C4mpIECYAAAAAAAAAAAAAAAAAAAAAAACY7DcGMnlEg1E8GgAAAABJRU5ErkJggg==" alt="ROY"><div class="boot-text">Cargando<span class="boot-dots"></span></div><div class="boot-status" id="bootStatus">Actualizando información oficial</div><div class="boot-line"></div><button class="boot-retry" type="button" onclick="location.reload()">REINTENTAR</button></div></div>
 
 <header><div class="wrap header"><a class="brand" href="#inicio" onclick="goHome();return false"><img id="headerLogo" alt="Logo ROY" class="hidden" onerror="useLogoFallback(this)"><span id="headerName" class="brand-fallback">ROY</span></a><nav class="nav desktop-nav"><button class="active" onclick="goHome()">Inicio</button></nav><div class="actions"><button id="headerFacebook" class="icon facebook social-hide" onclick="openSocial('facebook')" aria-label="Facebook"><i class="fa-brands fa-facebook-f"></i></button><button id="headerInstagram" class="icon instagram social-hide" onclick="openSocial('instagram')" aria-label="Instagram"><i class="fa-brands fa-instagram"></i></button><button id="headerTiktok" class="icon tiktok social-hide" onclick="openSocial('tiktok')" aria-label="TikTok"><i class="fa-brands fa-tiktok"></i></button><button class="icon search" onclick="showCatalog(true)" aria-label="Buscar en el catálogo"><i class="fa-solid fa-magnifying-glass"></i></button><button class="icon mobile-menu-btn" onclick="toggleMobileMenu()" aria-label="Abrir menú"><i class="fa-solid fa-bars"></i></button></div></div></header>
 <div id="mobilePanel" class="mobile-panel"><button onclick="goHome();toggleMobileMenu(false)"><i class="fa-solid fa-house"></i> Inicio</button><button class="primary" onclick="showCatalog();toggleMobileMenu(false)"><i class="fa-solid fa-shirt"></i> Ver catálogo</button><button onclick="visitOfficialStore();toggleMobileMenu(false)"><i class="fa-solid fa-store"></i> Tienda oficial</button></div>
@@ -326,10 +341,11 @@ html.roy-ready body>*{visibility:visible}
 <section id="fullGallery" class="wrap" hidden><div class="view-title"><div><div class="eyebrow">GALERÍA ROY</div><h2>Descubre todos <span>nuestros looks</span></h2><p>Explora las imágenes y publicaciones cargadas desde el panel oficial de ROY. Inspírate, encuentra tu combinación favorita y luego abre el catálogo para pedirla.</p></div><button class="btn back-home" onclick="goHome()"><i class="fa-solid fa-arrow-left"></i> Volver al inicio</button></div><div id="fullMediaGrid" class="full-gallery-grid"><div class="media-empty">Cargando galería...</div></div></section>
 <footer class="footer"><div class="wrap footer-grid"><div><img id="footerLogo" class="footer-logo" src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAARQAAABbCAYAAACyCXp0AAAE3klEQVR4nO3dW5LbMAxE0VYqi5wlZpfKR+Iqx5HGoggSDfqe77FFyUQPSPkhAQAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAdNlmHejXrv3q335t88bV4+o5VTkfoNfUid4SKg9OxXhn/JLXOQAjTZ/oVUOl6riBmX7MPuCdIrvbGUQhTIBrpgeKVCtUCBPgupRAkWqECmECtEkLFMk7VAgToJ1FAbgVb+t4CBLgD6tCcChkhzEAVaUueV61Fmf08ocwAfpYBYqUFyqECdDPLlCk+aFCmAAxLANFmle0hAkQxzZQpLbivdOlECZALOtAkcaFCmECxLMPFGl8pxJ5fOCTlQgUKTZUVvxuFsBBmUCRYoqbMAHGKRUo0vUi7136ECZAu5+zDhS5Cfq1aRv5IcErYUKnA/xvWoeS/bb6q8/5bpy/du2ECXBs6pInMlQyCpVbzcD37L8CsqdTiQwAwqS2vcOI57x6jFHH7rua56btoTwbvQcSLTNMXl/8bdu2kRNihm3bmq9P5jnv+77fGfMozq9/ia+APCvoGV2AW2fiPJmuaj0H13POCJmIazFy3GW+ArJCR8MyJ9bo9rzF2TgiivPKc0Rci+2vnud4J/19KM6h4nA3x6nVnsUpSJ6NGNPVMJlxnAjpgSJ5hopDmDx8Sqi4Bsk7I1+fSmEimQSK5BUqLb9ZPGuZs1KoHJ1LxSB5uDv2d69ptTCRjAJF8ggVfgAdZ2YWZ4X9kiNWgSLlhUrLreysMFmhS6nanZxd+xHdSUSY9Dy+h12gSN7vgs3uTCqHSuWxzxB1JydqPHdYBoqUX7hHHMdUXU8BbY16jhM59hFdWtYS55VtoEheBewylpkFGFmY0ZPdoXiiVO9KnlkHiuRRyA5j6BU16SL3O0bdHZlxrKjnWylMpAKBIuUWtFOYVNi8PJI96V2v22phIhUJFCmnsJ3CpMendyd3RXcnj8f2br667JccKRMo0twCdwuT7P+yDhuQlZc6UVyD5KFUoEh+hT5D73+znuP2/Dd1n/x3ZJ5ThetZLlCk8aGySmgdbQC2GDGmyt1Jz1h6OC9xXpUMlJHcwiSqsGe36tkFMPp8Z51f9nVsVTZQ3ArfzetErLyZ6TD23r8dPRYXZQNlBLeQyt4AjFRhqXPHqKKvGCYSgWJrxEbsjElatRCk+2OPPOdK+yVHCJQPM3KyOix1KiyrnMfQq3SguC1RomTdJm49zqsZx3UUscRa5fqVDhT86+qk7J28LY9fvTuJePv8KmEiJf0uD86xEdv/2FlW/CxOLzqURbROzsz/yk7udkKEyTECxUiF3x56eFdQK4XOM5Y43yNQTPSEicPtzopaz5+u5D0CxUBGmEQ8/qzAKnQnhMkYbMomqrTEObPv//+Q+LZ5/6A7YTIOgZIkIkyiJuqIAHAMFYJkPAIlwQqdybOjLkXyCZWR72n5xND4Dnsok0WFSfRE7n2+swLMLLi7d1SuhMnqd2vuokOZJLIrqTaRq433WeWxZ6BDmaDKEmdUl1INn0+6jw5lgpYPMX4lf96xd9/jbD8Fn4FA+WvVTy7fcSUQVulGEKv8kocgyLF9I3tsyFM+UCIQSkCMJQKlJxAIEyDOEoEi3QsGwgSItUygSH8C4mpIECYAAAAAAAAAAAAAAAAAAAAAAACY7DcGMnlEg1E8GgAAAABJRU5ErkJggg==" alt="Logo ROY" onerror="useLogoFallback(this)"><h3 id="footerName" class="brand-fallback">ROY</h3><p id="footerDescription">Moda urbana, casual y oversize para destacar con identidad propia.</p><div class="socials"><a id="facebookLink" class="facebook" href="#" target="_blank" rel="noopener" aria-label="Facebook"><i class="fa-brands fa-facebook-f"></i></a><a id="instagramLink" class="instagram" href="#" target="_blank" rel="noopener" aria-label="Instagram"><i class="fa-brands fa-instagram"></i></a><a id="tiktokLink" class="tiktok" href="#" target="_blank" rel="noopener" aria-label="TikTok"><i class="fa-brands fa-tiktok"></i></a><a id="whatsappLink" class="whatsapp-social" href="#" target="_blank" rel="noopener" aria-label="WhatsApp"><i class="fa-brands fa-whatsapp"></i></a></div></div><div><h4>Contacto</h4><p id="footerPhone" class="contact-line"></p><p id="footerEmail" class="contact-line"></p><p id="footerHours" class="contact-line"></p><p id="footerContactName" class="contact-line"></p></div><div><h4>Ubicación</h4><p id="footerAddress" class="contact-line"></p><p id="footerCity" class="contact-line"></p><p>Pedidos y consultas por WhatsApp.</p></div></div><div class="wrap copy">© <span id="year"></span> <span id="copyName">ROY</span>. Todos los derechos reservados.</div></footer>
 <div id="productModal" class="modal" onclick="if(event.target===this)closeProduct()"><div class="modal-box"><button class="close" onclick="closeProduct()" aria-label="Cerrar">×</button><div class="product-detail"><div class="gallery"><div class="main-image"><img id="modalImage" alt="Producto"></div><div id="thumbs" class="thumbs"></div></div><div class="info"><div class="product-meta"><span id="modalSku">SKU: ROY</span><span id="modalRating" class="rating">★★★★★ 5.0</span></div><div id="modalBrand" class="product-brand">ROY</div><div id="modalCategory" class="category"></div><h2 id="modalName"></h2><div><span id="modalPrice" class="price"></span><span id="modalOldPrice" class="old"></span><span id="modalDiscount" class="discount-badge hidden"></span></div><p id="modalDescription" class="description"></p><div id="colorBlock"><span class="label">Color seleccionado: <b id="selectedColor"></b></span><div id="colors" class="choices"></div></div><div id="sizeBlock"><span class="label">Elige una talla: <b id="selectedSize"></b></span><div id="sizes" class="choices"></div></div><span class="label">Cantidad</span><div class="qty"><button onclick="changeQty(-1)">−</button><span id="qty">1</span><button onclick="changeQty(1)">+</button></div><button id="orderButton" class="btn whatsapp" onclick="orderWhatsApp()"><i class="fa-brands fa-whatsapp"></i> Realizar compra por WhatsApp</button><div id="modalStock" class="stock"></div><div class="compact-help"><i class="fa-brands fa-whatsapp"></i><span>Selecciona color, talla y cantidad. Confirmaremos disponibilidad por WhatsApp.</span></div><div id="specGrid" class="spec-grid compact-specs"></div></div></div></div></div>
+<button id="floatingWhatsapp" class="floating-whatsapp" type="button" onclick="openFloatingWhatsApp()" aria-label="Consultar por WhatsApp"><span class="wa-label">¿Necesitas ayuda?</span><i class="fa-brands fa-whatsapp"></i></button>
 <div id="toast" class="toast"></div>
 <script>
 (function(){
-  const VERSION='roy-catalog-2.7-fast-home-20260728';
+  const VERSION='roy-catalog-2.8-navigation-floating-whatsapp-20260728';
   try{
     const old=localStorage.getItem('roy_catalog_version');
     if(old!==VERSION){
@@ -385,8 +401,7 @@ if(searchInput){
 const money=v=>'S/ '+Number(v||0).toFixed(2);const cleanPhone=v=>String(v||'').replace(/\D/g,'').replace(/^0+/,'');
 
 function revealApp(){if(window.__royBootWatchdog){clearTimeout(window.__royBootWatchdog);window.__royBootWatchdog=null}const boot=document.getElementById('royBoot');document.documentElement.classList.remove('roy-loading');document.documentElement.classList.add('roy-ready');if(boot){boot.classList.add('hide');setTimeout(()=>boot.remove(),420)}}
-// El inicio se muestra de inmediato; Firebase actualiza el contenido en segundo plano.
-requestAnimationFrame(()=>requestAnimationFrame(revealApp));
+// La portada permanece oculta hasta confirmar la configuración vigente desde Firebase.
 function toast(msg){const t=$('#toast');t.textContent=msg;t.classList.add('show');clearTimeout(toast.timer);toast.timer=setTimeout(()=>t.classList.remove('show'),2600)}
 function officialBaseUrl(){
  try{return new URL(DEFAULT_OFFICIAL_STORE_URL).origin+new URL(DEFAULT_OFFICIAL_STORE_URL).pathname.replace(/[^/]*$/,'')}
@@ -466,25 +481,51 @@ function hydrateProductAssets(product){
 }
 function rebuildProducts(){state.products=state.rawProducts.filter(p=>p.active!==false&&p.visible!==false).map(raw=>{const p=hydrateProductAssets(raw);return {...p,colors:Array.isArray(p.colors)?p.colors:splitList(p.colors),sizes:Array.isArray(p.sizes)?p.sizes:splitList(p.sizes),gallery:p.gallery||p.images||p.productImages||[],colorImages:p.colorImages||p.imagesByColor||p.colorGallery||{},_categoryName:categoryNameForProduct(p)}});fillCategories();renderProducts()}
 function stopRealtime(){state.unsubscribers.forEach(fn=>{try{fn()}catch(_){}});state.unsubscribers=[]}
+async function loadFreshSettings(db){
+ const snap=await getDocsFromServer(collection(db,'roy_settings'));
+ const rows=snap.docs.map(d=>({id:d.id,...d.data()}));
+ const main=rows.find(r=>r.id==='main')||{};
+ return {...defaults,...Object.assign({},...rows,main)};
+}
+async function preloadCurrentHero(settings){
+ const slide=Array.isArray(settings?.heroSlides)?settings.heroSlides[0]:null;
+ const source=normalizeAssetUrl(slide?.image||settings?.heroImage||settings?.bannerImage||'');
+ if(!source)return;
+ await new Promise(resolve=>{
+  const img=new Image();
+  let done=false;
+  const finish=()=>{if(done)return;done=true;resolve()};
+  img.onload=finish;img.onerror=finish;img.src=source;setTimeout(finish,1400);
+ });
+}
+function showBootError(message){
+ const boot=document.getElementById('royBoot');
+ const status=document.getElementById('bootStatus');
+ if(status)status.textContent=message||'No se pudo obtener la información actual.';
+ if(boot)boot.classList.add('error');
+}
 async function init(){
  try{
   const app=initializeApp(firebaseConfig),db=getFirestore(app);
   stopRealtime();
   const handleError=err=>{console.error('Firebase realtime:',err);toast('Conexión inestable. Se conservará la última información disponible.')};
 
-  // 1) Mostrar siempre la portada principal inmediatamente.
-  applySettings();
-  revealApp();
+  // 1) Confirmar primero la configuración vigente. Nunca mostrar textos o portada antiguos.
+  const bootStatus=document.getElementById('bootStatus');
+  if(bootStatus)bootStatus.textContent='Actualizando información oficial';
+  try{
+   state.settings=await loadFreshSettings(db);
+   if(bootStatus)bootStatus.textContent='Preparando portada';
+   await preloadCurrentHero(state.settings);
+   applySettings();
+   revealApp();
+  }catch(settingsError){
+   console.error('Configuración actual:',settingsError);
+   showBootError('No se pudo confirmar la información actual. Revisa tu conexión y vuelve a intentar.');
+   return;
+  }
 
-  // 2) Configuración primero: es liviana y actualiza logo, portada y contactos rápidamente.
-  getDocFromServer(doc(db,'roy_settings','main')).then(mainSnap=>{
-   if(mainSnap.exists()){
-    state.settings={...defaults,...mainSnap.data()};
-    applySettings();
-   }
-  }).catch(()=>{});
-
-  // 3) Productos, categorías e imágenes se descargan en paralelo sin bloquear el inicio.
+  // 2) Productos, categorías e imágenes se descargan en paralelo después de mostrar la portada actual.
   const categoriesPromise=getDocsFromServer(collection(db,'roy_categories')).then(snap=>{
    state.categories=snap.docs.map(d=>({id:d.id,...d.data()})).filter(c=>c.active!==false&&c.visible!==false);
    rebuildProducts();
@@ -500,7 +541,7 @@ async function init(){
    rebuildProducts();
   }).catch(err=>console.warn('Imágenes de productos:',err));
 
-  // 4) La galería es secundaria: cargarla al final para no retrasar la portada.
+  // 3) La galería es secundaria: cargarla al final para no retrasar la portada.
   const loadMedia=()=>getDocsFromServer(collection(db,'roy_media')).then(snap=>{
    state.media=snap.docs.map(d=>({id:d.id,...d.data()})).filter(m=>m.active!==false&&m.visible!==false);
    renderMediaPreview();
@@ -510,7 +551,7 @@ async function init(){
 
   Promise.allSettled([categoriesPromise,productsPromise,assetsPromise]).then(()=>renderProducts());
 
-  // 5) Mantener todos los datos sincronizados en tiempo real.
+  // 4) Mantener todos los datos sincronizados en tiempo real.
   state.unsubscribers.push(onSnapshot(collection(db,'roy_categories'),{includeMetadataChanges:true},snap=>{
    if(snap.metadata.fromCache&&navigator.onLine)return;
    state.categories=snap.docs.map(d=>({id:d.id,...d.data()})).filter(c=>c.active!==false&&c.visible!==false);
@@ -540,9 +581,7 @@ async function init(){
   },handleError));
  }catch(err){
   console.error(err);
-  applySettings();
-  revealApp();
-  toast('La portada está disponible. Revisa tu conexión para cargar el catálogo.');
+  showBootError('No se pudo confirmar la información actual. Revisa tu conexión y vuelve a intentar.');
  }
 }
 function splitList(v){return String(v||'').split(/[,\n]/).map(x=>x.trim()).filter(Boolean)}
@@ -680,6 +719,8 @@ window.selectColor=v=>{state.color=decodeURIComponent(v);renderOptions();renderG
 function renderGallery(){state.activeImages=productImages(state.selected,state.color).map(normalizeAssetUrl).filter(Boolean);if(!state.activeImages.length)state.activeImages=[PRODUCT_FALLBACK];const main=$('#modalImage');main.dataset.sources=encodeURIComponent(JSON.stringify(state.activeImages));main.dataset.index='0';main.onerror=()=>tryNextProductImage(main);main.src=state.activeImages[0];$('#thumbs').innerHTML=state.activeImages.slice(0,5).map((src,i)=>`<button class="thumb ${i===0?'active':''}" onclick="setImage(${i},this)"><img src="${esc(src)}" onerror="this.onerror=null;this.src=PRODUCT_FALLBACK"></button>`).join('');$('#thumbs').classList.toggle('hidden',state.activeImages.length<2)}
 window.setImage=(i,btn)=>{$('#modalImage').src=state.activeImages[i];document.querySelectorAll('.thumb').forEach(x=>x.classList.remove('active'));btn.classList.add('active')};window.closeProduct=()=>{$('#productModal').classList.remove('open');document.documentElement.style.overflow='';document.body.style.overflow=''};
 window.orderWhatsApp=()=>{const p=state.selected;if(!p)return;const phone=cleanPhone(contactData().whatsapp);if(!phone){toast('Configura el número de WhatsApp desde el panel administrativo.');return}const total=Number(p.price||0)*state.qty;const lines=[`🛍️ *NUEVO PEDIDO - ${state.settings.storeName||'ROY'}*`,'',`📦 *Producto:* ${p.name}`,`🏷️ *Código:* ${p.sku||p.id}`,`📁 *Categoría:* ${p._categoryName||'Sin categoría'}`,`🎨 *Color:* ${state.color||'Único'}`,`📏 *Talla:* ${state.size||'Única'}`,`🔢 *Cantidad:* ${state.qty}`,`💵 *Precio unitario:* ${money(p.price)}`,`💰 *Total:* ${money(total)}`,'','Deseo confirmar la disponibilidad y realizar este pedido.'];const url='https://wa.me/'+phone+'?text='+encodeURIComponent(lines.join('\n'));const w=window.open(url,'_blank','noopener,noreferrer');if(!w)setTimeout(()=>{window.location.href=url},150)};
+
+window.openFloatingWhatsApp=()=>{const phone=cleanPhone(contactData().whatsapp);if(!phone){toast('WhatsApp aún no está configurado.');return}const text=encodeURIComponent(`Hola, deseo información sobre los productos de ${state.settings.storeName||'ROY'}.`);const url='https://wa.me/'+phone+'?text='+text;const w=window.open(url,'_blank','noopener,noreferrer');if(!w)setTimeout(()=>{window.location.href=url},120)};
 window.visitOfficialStore=()=>{const url=DEFAULT_OFFICIAL_STORE_URL;const w=window.open(url,'_blank','noopener,noreferrer');if(!w)window.location.href=url};
 function setView(view,{push=true,focusSearch=false}={}){const valid=['home','catalog','gallery'].includes(view)?view:'home';document.body.dataset.view=valid;$('#catalogo').classList.toggle('open',valid==='catalog');$('#fullGallery').hidden=valid!=='gallery';$('#mobilePanel').classList.remove('open');if(push){const hash=valid==='home'?'#inicio':valid==='catalog'?'#catalogo':'#galeria';history.pushState({royView:valid},'',hash)}window.scrollTo({top:0,behavior:'smooth'});if(valid==='catalog'&&focusSearch)setTimeout(()=>$('#search').focus(),350)}
 window.openFullGallery=()=>setView('gallery');window.openSocial=n=>{const u=normalizeUrl(getSocialUrl(n));if(!u)return toast('Esta red social aún no está configurada en el panel.');openSafe(u)};window.showCatalog=(focusSearch=false)=>setView('catalog',{focusSearch});window.scrollCatalog=window.showCatalog;window.goHome=()=>setView('home');window.toggleMobileMenu=force=>{$('#mobilePanel').classList.toggle('open',typeof force==='boolean'?force:!$('#mobilePanel').classList.contains('open'))};
@@ -692,18 +733,135 @@ history.replaceState({royRoot:true,royView:'home'},'',location.pathname+location
 history.pushState({royGuard:true,royView:initialView},'',initialView==='catalog'?'#catalogo':initialView==='gallery'?'#galeria':'#inicio');
 window.addEventListener('popstate',()=>{
  if(allowingExit)return;
+ if($('#productModal')?.classList.contains('open')){closeProduct();history.pushState({royGuard:true,royView:document.body.dataset.view||'home'},'',location.hash||'#inicio');return}
+ if($('#mobilePanel')?.classList.contains('open')){toggleMobileMenu(false);history.pushState({royGuard:true,royView:document.body.dataset.view||'home'},'',location.hash||'#inicio');return}
  const current=document.body.dataset.view||'home';
- if(current!=='home'){setView('home',{push:false});history.pushState({royGuard:true,royView:'home'},'','#inicio');exitAttemptCount=0;return}
+ if(current!=='home'){setView('home',{push:false});history.pushState({royGuard:true,royView:'home'},'','#inicio');exitAttemptCount=0;toast('Volviste al inicio de ROY');return}
  exitAttemptCount+=1;
  clearTimeout(exitAttemptTimer);
- exitAttemptTimer=setTimeout(()=>{exitAttemptCount=0},4200);
- if(exitAttemptCount===1){history.pushState({royGuard:true,royView:'home'},'','#inicio');toast('Presiona atrás dos veces más para salir de ROY');return}
- if(exitAttemptCount===2){history.pushState({royGuard:true,royView:'home'},'','#inicio');toast('Presiona atrás una vez más para salir');return}
+ exitAttemptTimer=setTimeout(()=>{exitAttemptCount=0},5000);
+ history.pushState({royGuard:true,royView:'home'},'','#inicio');
+ if(exitAttemptCount===1){toast('Presiona atrás dos veces más para salir de ROY');return}
+ if(exitAttemptCount===2){toast('Presiona atrás una vez más para salir');return}
  allowingExit=true;
- history.go(-2);
+ setTimeout(()=>history.go(-3),50);
 });
 setView(initialView,{push:false});
 document.addEventListener('keydown',e=>{if(e.key==='Escape'){closeProduct();toggleMobileMenu(false)}});document.addEventListener('click',e=>{if(!e.target.closest('.mobile-panel')&&!e.target.closest('.mobile-menu-btn'))toggleMobileMenu(false)});window.addEventListener('resize',()=>{if(innerWidth>980)toggleMobileMenu(false)});document.addEventListener('visibilitychange',()=>{if(!document.hidden){applySettings();renderMediaPreview();renderProducts()}});window.addEventListener('beforeunload',stopRealtime);ensureSocialIcons();init();
 </script>
 </body>
 </html>
+
+<style id="roy-v3-mobile-product-view">
+/* ROY Catalog Premium 3.0: prendas mas amplias y miniaturas mejoradas en movil */
+@media (max-width: 760px) {
+  body[data-view="catalog"] .grid {
+    grid-template-columns: 1fr;
+    gap: 18px;
+  }
+  body[data-view="catalog"] .card {
+    max-width: 560px;
+    width: 100%;
+    margin-inline: auto;
+    border-radius: 20px;
+  }
+  body[data-view="catalog"] .card-image {
+    aspect-ratio: 4 / 5;
+    min-height: min(68vh, 560px);
+    background: #f3f3f3;
+  }
+  body[data-view="catalog"] .card-image img {
+    object-fit: cover;
+  }
+  body[data-view="catalog"] .card-body {
+    padding: 17px 16px 18px;
+  }
+  body[data-view="catalog"] .card h3 {
+    font-size: 26px;
+  }
+  body[data-view="catalog"] .price {
+    font-size: 23px;
+  }
+
+  .modal .gallery {
+    padding: 12px 12px 14px;
+    background: #f4f5f6;
+  }
+  .modal .main-image {
+    width: calc(100vw - 24px);
+    max-width: 560px;
+    height: auto;
+    max-height: none;
+    aspect-ratio: 4 / 5;
+    margin: 0 auto;
+    border-radius: 20px;
+    overflow: hidden;
+    box-shadow: 0 12px 30px rgba(0,0,0,.12);
+  }
+  .modal .main-image img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    background: #eee;
+  }
+  .modal .thumbs {
+    display: flex;
+    gap: 10px;
+    justify-content: flex-start;
+    width: calc(100vw - 24px);
+    max-width: 560px;
+    margin: 12px auto 0;
+    padding: 4px 2px 8px;
+    overflow-x: auto;
+    scroll-snap-type: x proximity;
+    scrollbar-width: none;
+  }
+  .modal .thumbs::-webkit-scrollbar { display: none; }
+  .modal .thumb {
+    flex: 0 0 74px;
+    width: 74px;
+    height: 88px;
+    padding: 3px;
+    border: 2px solid #d6dae0;
+    border-radius: 13px;
+    background: #fff;
+    box-shadow: 0 6px 16px rgba(0,0,0,.08);
+    scroll-snap-align: start;
+    transition: transform .2s ease, border-color .2s ease, box-shadow .2s ease;
+  }
+  .modal .thumb img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    border-radius: 9px;
+  }
+  .modal .thumb.active {
+    border-color: #78ea00;
+    box-shadow: 0 0 0 3px rgba(120,234,0,.22), 0 8px 20px rgba(0,0,0,.1);
+    transform: translateY(-2px);
+  }
+  .modal .info {
+    padding: 20px 18px calc(34px + env(safe-area-inset-bottom));
+  }
+}
+
+@media (max-width: 420px) {
+  .modal .main-image {
+    width: calc(100vw - 18px);
+    border-radius: 17px;
+  }
+  .modal .thumbs {
+    width: calc(100vw - 18px);
+    gap: 8px;
+  }
+  .modal .thumb {
+    flex-basis: 66px;
+    width: 66px;
+    height: 78px;
+    border-radius: 11px;
+  }
+  body[data-view="catalog"] .card-image {
+    min-height: min(64vh, 510px);
+  }
+}
+</style>
