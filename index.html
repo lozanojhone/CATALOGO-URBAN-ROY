@@ -7,7 +7,7 @@
 <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
 <meta http-equiv="Pragma" content="no-cache">
 <meta http-equiv="Expires" content="0">
-<meta name="app-version" content="ROY-CATALOG-1.9-20260728">
+<meta name="app-version" content="ROY-CATALOG-2.0-20260728">
 <meta name="referrer" content="strict-origin-when-cross-origin">
 <meta http-equiv="X-Content-Type-Options" content="nosniff">
 <title>ROY | Catálogo</title>
@@ -273,9 +273,29 @@ html.roy-ready body>*{visibility:visible}
 .clean-video video::-webkit-media-controls-enclosure{background:linear-gradient(transparent,rgba(0,0,0,.65))}
 .video-shell a,.video-fallback{display:none!important}
 </style>
+
+<style id="roy-v20-final">
+/* ROY Catalog Premium 2.1 */
+#royBoot{background:#050505!important}
+#royBoot .boot-inner{display:grid;justify-items:center;gap:14px}
+#royBoot img{width:min(190px,48vw)!important;max-height:92px}
+#royBoot .boot-text{font:800 15px/1 Inter,system-ui,sans-serif;letter-spacing:2px;text-transform:uppercase;color:#fff}
+#royBoot .boot-dots::after{content:"";animation:royDots 1.05s steps(4,end) infinite}
+@keyframes royDots{0%{content:""}25%{content:"."}50%{content:".."}75%,100%{content:"..."}}
+#royBoot .boot-line{width:86px!important;height:2px!important;margin:2px auto 0!important}
+.clean-video{position:relative;background:#000!important;cursor:default!important}
+.clean-video video{width:100%;height:100%;object-fit:cover;background:#000;cursor:pointer}
+.clean-video::after{content:"ROY";position:absolute;right:10px;top:10px;z-index:2;padding:5px 8px;border-radius:999px;background:rgba(0,0,0,.58);color:#a8ff00;font:800 10px/1 Inter,sans-serif;letter-spacing:1px;pointer-events:none}
+.video-needs-file{width:100%;height:100%;display:grid;place-items:center;text-align:center;padding:22px;background:linear-gradient(145deg,#0c0c0c,#171717);color:#fff}
+.video-needs-file i{font-size:34px;color:#a8ff00;margin-bottom:10px}.video-needs-file strong{display:block;font-size:14px}.video-needs-file small{display:block;max-width:270px;margin-top:7px;color:#9aa0a6;font-size:11px;line-height:1.45}
+.video-shell iframe,.social-video{pointer-events:none!important}
+@media(max-width:760px){#royBoot img{width:min(170px,52vw)!important}.video-needs-file{padding:12px}.video-needs-file i{font-size:26px}.video-needs-file strong{font-size:12px}.video-needs-file small{font-size:10px}.whatsapp{position:sticky!important;bottom:calc(12px + env(safe-area-inset-bottom))!important;min-height:58px!important;margin-bottom:calc(18px + env(safe-area-inset-bottom))!important}}
+</style>
 <script>document.documentElement.classList.add("roy-loading");</script>
 </head>
 <body data-view="home">
+<div id="royBoot" role="status" aria-live="polite" aria-label="Cargando catálogo ROY"><div class="boot-inner"><img src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAARQAAABbCAYAAACyCXp0AAAE3klEQVR4nO3dW5LbMAxE0VYqi5wlZpfKR+Iqx5HGoggSDfqe77FFyUQPSPkhAQAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAdNlmHejXrv3q335t88bV4+o5VTkfoNfUid4SKg9OxXhn/JLXOQAjTZ/oVUOl6riBmX7MPuCdIrvbGUQhTIBrpgeKVCtUCBPgupRAkWqECmECtEkLFMk7VAgToJ1FAbgVb+t4CBLgD6tCcChkhzEAVaUueV61Fmf08ocwAfpYBYqUFyqECdDPLlCk+aFCmAAxLANFmle0hAkQxzZQpLbivdOlECZALOtAkcaFCmECxLMPFGl8pxJ5fOCTlQgUKTZUVvxuFsBBmUCRYoqbMAHGKRUo0vUi7136ECZAu5+zDhS5Cfq1aRv5IcErYUKnA/xvWoeS/bb6q8/5bpy/du2ECXBs6pInMlQyCpVbzcD37L8CsqdTiQwAwqS2vcOI57x6jFHH7rua56btoTwbvQcSLTNMXl/8bdu2kRNihm3bmq9P5jnv+77fGfMozq9/ia+APCvoGV2AW2fiPJmuaj0H13POCJmIazFy3GW+ArJCR8MyJ9bo9rzF2TgiivPKc0Rci+2vnud4J/19KM6h4nA3x6nVnsUpSJ6NGNPVMJlxnAjpgSJ5hopDmDx8Sqi4Bsk7I1+fSmEimQSK5BUqLb9ZPGuZs1KoHJ1LxSB5uDv2d69ptTCRjAJF8ggVfgAdZ2YWZ4X9kiNWgSLlhUrLreysMFmhS6nanZxd+xHdSUSY9Dy+h12gSN7vgs3uTCqHSuWxzxB1JydqPHdYBoqUX7hHHMdUXU8BbY16jhM59hFdWtYS55VtoEheBewylpkFGFmY0ZPdoXiiVO9KnlkHiuRRyA5j6BU16SL3O0bdHZlxrKjnWylMpAKBIuUWtFOYVNi8PJI96V2v22phIhUJFCmnsJ3CpMendyd3RXcnj8f2br667JccKRMo0twCdwuT7P+yDhuQlZc6UVyD5KFUoEh+hT5D73+znuP2/Dd1n/x3ZJ5ThetZLlCk8aGySmgdbQC2GDGmyt1Jz1h6OC9xXpUMlJHcwiSqsGe36tkFMPp8Z51f9nVsVTZQ3ArfzetErLyZ6TD23r8dPRYXZQNlBLeQyt4AjFRhqXPHqKKvGCYSgWJrxEbsjElatRCk+2OPPOdK+yVHCJQPM3KyOix1KiyrnMfQq3SguC1RomTdJm49zqsZx3UUscRa5fqVDhT86+qk7J28LY9fvTuJePv8KmEiJf0uD86xEdv/2FlW/CxOLzqURbROzsz/yk7udkKEyTECxUiF3x56eFdQK4XOM5Y43yNQTPSEicPtzopaz5+u5D0CxUBGmEQ8/qzAKnQnhMkYbMomqrTEObPv//+Q+LZ5/6A7YTIOgZIkIkyiJuqIAHAMFYJkPAIlwQqdybOjLkXyCZWR72n5xND4Dnsok0WFSfRE7n2+swLMLLi7d1SuhMnqd2vuokOZJLIrqTaRq433WeWxZ6BDmaDKEmdUl1INn0+6jw5lgpYPMX4lf96xd9/jbD8Fn4FA+WvVTy7fcSUQVulGEKv8kocgyLF9I3tsyFM+UCIQSkCMJQKlJxAIEyDOEoEi3QsGwgSItUygSH8C4mpIECYAAAAAAAAAAAAAAAAAAAAAAACY7DcGMnlEg1E8GgAAAABJRU5ErkJggg==" alt="ROY"><div class="boot-text">Cargando<span class="boot-dots"></span></div><div class="boot-line"></div></div></div>
+
 <header><div class="wrap header"><a class="brand" href="#inicio" onclick="goHome();return false"><img id="headerLogo" alt="Logo ROY" class="hidden" onerror="useLogoFallback(this)"><span id="headerName" class="brand-fallback">ROY</span></a><nav class="nav desktop-nav"><button class="active" onclick="goHome()">Inicio</button></nav><div class="actions"><button id="headerFacebook" class="icon facebook social-hide" onclick="openSocial('facebook')" aria-label="Facebook"><i class="fa-brands fa-facebook-f"></i></button><button id="headerInstagram" class="icon instagram social-hide" onclick="openSocial('instagram')" aria-label="Instagram"><i class="fa-brands fa-instagram"></i></button><button id="headerTiktok" class="icon tiktok social-hide" onclick="openSocial('tiktok')" aria-label="TikTok"><i class="fa-brands fa-tiktok"></i></button><button class="icon search" onclick="showCatalog(true)" aria-label="Buscar en el catálogo"><i class="fa-solid fa-magnifying-glass"></i></button><button class="icon mobile-menu-btn" onclick="toggleMobileMenu()" aria-label="Abrir menú"><i class="fa-solid fa-bars"></i></button></div></div></header>
 <div id="mobilePanel" class="mobile-panel"><button onclick="goHome();toggleMobileMenu(false)"><i class="fa-solid fa-house"></i> Inicio</button><button class="primary" onclick="showCatalog();toggleMobileMenu(false)"><i class="fa-solid fa-shirt"></i> Ver catálogo</button><button onclick="visitOfficialStore();toggleMobileMenu(false)"><i class="fa-solid fa-store"></i> Tienda oficial</button></div>
 <section id="inicio" class="hero"><div class="hero-content"><div class="eyebrow" id="heroKicker">NUEVA COLECCIÓN 2026</div><h1 id="heroTitle">Viste tu propia actitud</h1><p id="heroText">Moda urbana, oversize y streetwear creada para quienes convierten cada prenda en identidad.</p><div class="hero-actions"><button class="btn btn-catalog" onclick="showCatalog()"><i class="fa-solid fa-shirt"></i> Ver catálogo</button><button class="btn btn-store" onclick="visitOfficialStore()"><i class="fa-solid fa-store"></i><span> Ir a la tienda oficial</span></button></div></div></section>
@@ -310,11 +330,12 @@ const DEFAULT_OFFICIAL_STORE_URL='https://lozanojhone.github.io/ROY/#inicio';
 const firebaseConfig={apiKey:'AIzaSyBfVsL9sVnrGyu30Ek4KzhLRqORaAr4pkE',authDomain:'el-mashita.firebaseapp.com',projectId:'el-mashita',storageBucket:'el-mashita.firebasestorage.app',messagingSenderId:'667981540511',appId:'1:667981540511:web:08df9f8fb54128c9cd868aa'};
 const defaults={storeName:'ROY',whatsapp:'51926884544',email:'roycajamarca@gmail.com',hours:'Lunes a sábado: 8:00 AM a 8:00 PM',address:'Cajamarca, Perú',facebook:'',instagram:'',tiktok:'',logo:EMBEDDED_OFFICIAL_LOGO,officialStoreUrl:DEFAULT_OFFICIAL_STORE_URL,primaryColor:'#a8ff00',secondaryColor:'#ffffff',backgroundColor:'#080808',textColor:'#ffffff'};
 const state={products:[],rawProducts:[],categories:[],media:[],settings:{...defaults},selected:null,color:'',size:'',qty:1,activeImages:[],activeCategory:'',unsubscribers:[]};
+const categorySelect=$('#category');if(categorySelect){categorySelect.addEventListener('change',event=>{state.activeCategory=event.target.value;renderProducts();});}
 const $=s=>document.querySelector(s);const esc=v=>String(v??'').replace(/[&<>'"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;',"'":'&#39;','"':'&quot;'}[c]));
 const money=v=>'S/ '+Number(v||0).toFixed(2);const cleanPhone=v=>String(v||'').replace(/\D/g,'').replace(/^0+/,'');
 
 function revealApp(){const boot=document.getElementById('royBoot');document.documentElement.classList.remove('roy-loading');document.documentElement.classList.add('roy-ready');if(boot){boot.classList.add('hide');setTimeout(()=>boot.remove(),420)}}
-setTimeout(revealApp,6500);
+setTimeout(revealApp,3200);
 function toast(msg){const t=$('#toast');t.textContent=msg;t.classList.add('show');clearTimeout(toast.timer);toast.timer=setTimeout(()=>t.classList.remove('show'),2600)}
 function usable(v){return typeof v==='string'&&v.trim()&&!v.startsWith('blob:')}
 function norm(v){return String(v||'').trim().toLocaleLowerCase('es').normalize('NFD').replace(/[\u0300-\u036f]/g,'')}
@@ -375,27 +396,48 @@ function instagramEmbed(url){const m=String(url||'').match(/instagram\.com\/(p|r
 function tiktokId(url){const m=String(url||'').match(/tiktok\.com\/.*?video\/(\d+)/i);return m?.[1]||''}
 function facebookEmbed(url){return /facebook\.com|fb\.watch/i.test(String(url||''))?`https://www.facebook.com/plugins/video.php?href=${encodeURIComponent(url)}&show_text=false&autoplay=false&width=500`:''}
 function mediaVisual(m){
- const src=mediaSource(m),type=String(m.type||m.kind||m.mediaType||'image').toLowerCase(),title=esc(m.title||'Video ROY');
- if(!src)return '<div class="video-unavailable"><i class="fa-solid fa-video-slash"></i><strong>Contenido no disponible</strong><small>Publica nuevamente el archivo desde el panel.</small></div>';
- const yid=youtubeId(src);
- if(yid)return `<div class="video-shell"><iframe loading="lazy" src="https://www.youtube-nocookie.com/embed/${esc(yid)}?rel=0&playsinline=1&autoplay=1&mute=1&controls=1" title="${title}" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe></div>`;
- const vid=vimeoId(src);
- if(vid)return `<div class="video-shell"><iframe loading="lazy" src="https://player.vimeo.com/video/${esc(vid)}?dnt=1&autoplay=1&muted=1&playsinline=1" title="${title}" allow="autoplay; fullscreen; picture-in-picture" allowfullscreen></iframe></div>`;
- const ig=instagramEmbed(src);
- if(ig)return `<div class="video-shell social-video"><iframe loading="lazy" src="${esc(ig)}" title="${title}" allow="autoplay; encrypted-media; picture-in-picture" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe></div>`;
- const tid=tiktokId(src);
- if(tid)return `<div class="video-shell social-video"><iframe loading="lazy" src="https://www.tiktok.com/player/v1/${esc(tid)}?autoplay=1&loop=1&muted=1&controls=1" title="${title}" allow="fullscreen; autoplay; encrypted-media; picture-in-picture" allowfullscreen></iframe></div>`;
- const fb=facebookEmbed(src);
- if(fb){const autoplay=fb.replace('autoplay=false','autoplay=true');return `<div class="video-shell social-video"><iframe loading="lazy" src="${esc(autoplay)}" title="${title}" allow="autoplay; encrypted-media; picture-in-picture" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe></div>`}
- if(type==='video'||type==='reel'||type==='mp4'||/^data:video\//i.test(src)||/^blob:/i.test(src)||/\.(mp4|webm|ogg|mov|m4v)(?:[?#]|$)/i.test(src))return `<div class="video-shell clean-video"><video src="${esc(src)}" controls muted playsinline preload="metadata" controlslist="nodownload noplaybackrate" disablepictureinpicture onerror="this.parentElement.innerHTML='<div class=&quot;video-unavailable&quot;><i class=&quot;fa-solid fa-video-slash&quot;></i><strong>Video no disponible</strong><small>Vuelve a subirlo como MP4 o WebM desde el panel.</small></div>'"></video></div>`;
+ const raw=[m.fileUrl,m.videoUrl,m.video,m.url,m.src,m.mediaUrl,m.file,m.content,m.image,m.imageUrl,m.thumbnail].find(v=>typeof v==='string'&&v.trim())||'';
+ const src=String(raw).trim();
+ const type=norm(m.type||m.mediaType||m.kind||'');
+ const direct=/^data:video\//i.test(src)||/^blob:/i.test(src)||/\.(mp4|webm|ogg|m4v)(?:[?#]|$)/i.test(src);
+ if(direct){return `<div class="video-shell clean-video"><video src="${esc(src)}" controls muted playsinline preload="metadata" controlslist="nodownload noplaybackrate noremoteplayback" disablepictureinpicture disableremoteplayback oncontextmenu="return false" onclick="event.stopPropagation()" onerror="this.parentElement.innerHTML='<div class=&quot;video-needs-file&quot;><div><i class=&quot;fa-solid fa-video-slash&quot;></i><strong>Video no disponible</strong><small>Vuelve a subir el archivo como MP4 o WebM desde el panel.</small></div></div>'"></video></div>`}
+ const isExternalVideo=type==='video'||type==='reel'||/youtube|youtu\.be|vimeo|instagram|tiktok|facebook|fb\.watch/i.test(src);
+ if(isExternalVideo){return `<div class="video-shell"><div class="video-needs-file"><div><i class="fa-solid fa-file-video"></i><strong>Video listo para carga directa</strong><small>Para reproducirlo limpio, sin redirecciones, usuario ni marca externa, súbelo desde el panel como archivo MP4 o WebM.</small></div></div></div>`}
  return `<img loading="lazy" src="${esc(src)}" alt="${esc(m.title||'Galería ROY')}" onerror="this.closest('.media-tile').style.display='none'">`
 }
 function mediaCard(m){return `<article class="media-tile"><div class="media-visual">${mediaVisual(m)}</div><div class="media-caption"><h3>${esc(m.title||'Estilo ROY')}</h3>${m.description?`<p>${esc(m.description)}</p>`:''}</div></article>`}
 function renderMediaPreview(){const sorted=state.media.slice().sort((a,b)=>Number(b.order||0)-Number(a.order||0));const rows=sorted.slice(0,3);$('#mediaGrid').innerHTML=rows.length?rows.map(mediaCard).join(''):'<div class="media-empty">Aún no hay imágenes visibles en la galería. Al publicarlas desde el panel aparecerán aquí automáticamente.</div>';$('#fullMediaGrid').innerHTML=sorted.length?sorted.map(mediaCard).join(''):'<div class="media-empty">Aún no hay publicaciones visibles en la galería.</div>'}
 function isFeaturedProduct(p){const tags=Array.isArray(p.tags)?p.tags.map(norm):[norm(p.tags)];return Boolean(p.featured||p.destacado||p.isFeatured||tags.some(t=>["destacado","featured","nuevo","recomendado"].includes(t)))}
 function renderFeaturedProducts(){const available=state.products.filter(p=>p.active!==false&&p.visible!==false);const selected=[...available.filter(isFeaturedProduct),...available.filter(p=>!isFeaturedProduct(p))].filter((p,i,a)=>a.findIndex(x=>String(x.id)===String(p.id))===i).slice(0,4);const grid=$('#featuredGrid');if(!grid)return;grid.innerHTML=selected.length?selected.map(p=>`<article class="featured-card" role="button" tabindex="0" onclick="openProduct('${esc(p.id)}')" onkeydown="if(event.key==='Enter'||event.key===' '){event.preventDefault();openProduct('${esc(p.id)}')}"><img loading="lazy" src="${esc(productImages(p)[0])}" alt="${esc(p.name)}" onerror="this.src='https://placehold.co/800x1000/151515/ffffff?text=ROY'"><span class="featured-badge">Destacado</span><div class="featured-overlay"><h3>${esc(p.name)}</h3><span>${money(p.price)}</span></div></article>`).join(''):'<div class="media-empty">Los productos destacados que publiques desde el panel aparecerán aquí.</div>'}
-function fillCategories(){const names=[...new Set([...state.categories.map(c=>String(c.name||'').trim()),...state.products.map(p=>p._categoryName)].filter(Boolean))].sort((a,b)=>a.localeCompare(b,'es'));$('#category').innerHTML='<option value="">Todas las categorías</option>'+names.map(x=>`<option value="${esc(x)}">${esc(x)}</option>`).join('')}
-function renderProducts(){const q=norm($('#search').value),cat=norm($('#category').value);state.activeCategory=$('#category').value;const list=state.products.filter(p=>(!cat||norm(p._categoryName)===cat)&&(!q||norm([p.name,p._categoryName,p.sku,p.brand,Array.isArray(p.tags)?p.tags.join(' '):p.tags].join(' ')).includes(q)));$('#productCount').textContent=list.length+' producto'+(list.length===1?'':'s');$('#products').innerHTML=list.length?list.map(card).join(''):'<div class="empty">No encontramos productos con esos filtros.</div>'}
+function fillCategories(){
+ const select=$('#category');
+ if(!select)return;
+ const previous=state.activeCategory||select.value||'';
+ const names=[...new Set([
+  ...state.categories.map(c=>String(c.name||c.title||c.label||'').trim()),
+  ...state.products.map(p=>String(p._categoryName||'').trim())
+ ].filter(Boolean))].sort((a,b)=>a.localeCompare(b,'es',{sensitivity:'base'}));
+ select.innerHTML='<option value="">Todas las categorías</option>'+names.map(x=>`<option value="${esc(x)}">${esc(x)}</option>`).join('');
+ const recovered=names.find(name=>norm(name)===norm(previous));
+ select.value=recovered||'';
+ state.activeCategory=select.value;
+}
+function renderProducts(){
+ const search=$('#search'),select=$('#category');
+ if(!search||!select)return;
+ const q=norm(search.value);
+ const chosen=select.value||state.activeCategory||'';
+ const cat=norm(chosen);
+ state.activeCategory=chosen;
+ const list=state.products.filter(p=>{
+  const productCategory=norm(p._categoryName||p.categoryName||p.category||'');
+  const matchesCategory=!cat||productCategory===cat;
+  const haystack=norm([p.name,p._categoryName,p.categoryName,p.category,p.sku,p.code,p.brand,Array.isArray(p.tags)?p.tags.join(' '):p.tags].join(' '));
+  return matchesCategory&&(!q||haystack.includes(q));
+ });
+ $('#productCount').textContent=list.length+' producto'+(list.length===1?'':'s');
+ $('#products').innerHTML=list.length?list.map(card).join(''):'<div class="empty">No encontramos productos en esta categoría.</div>';
+}
 function card(p){const discount=Number(p.oldPrice)>Number(p.price),tag=(p.tags||[])[0];return `<article class="card"><div class="card-image" onclick="openProduct('${esc(p.id)}')"><img loading="lazy" src="${esc(productImages(p)[0])}" alt="${esc(p.name)}" onerror="this.src='https://placehold.co/800x1000/151515/ffffff?text=ROY'">${tag?`<span class="tag">${esc(tag)}</span>`:''}</div><div class="card-body"><div class="brandline">${esc(p.brand||state.settings.storeName||'ROY')}</div><h3>${esc(p.name)}</h3><span class="price">${money(p.price)}</span>${discount?`<span class="old">${money(p.oldPrice)}</span>`:''}<button class="btn btn-primary" onclick="openProduct('${esc(p.id)}')"><i class="fa-brands fa-whatsapp"></i> Ver y pedir</button></div></article>`}
 window.openProduct=id=>{const p=state.products.find(x=>String(x.id)===String(id));if(!p)return;state.selected=p;state.color=p.colors?.[0]||'Único';state.size=p.sizes?.[0]||'Única';state.qty=1;const price=Number(p.price||0),old=Number(p.oldPrice||0),discount=old>price?Math.round((1-price/old)*100):0;$('#modalSku').textContent='SKU: '+(p.sku||p.code||('ROY-'+String(p.id).slice(-10)));$('#modalRating').textContent='★★★★★ '+Number(p.rating||4.8).toFixed(1);$('#modalBrand').textContent=p.brand||state.settings.storeName||'ROY';$('#modalCategory').textContent=p._categoryName||'Producto';$('#modalName').textContent=p.name||'Producto';$('#modalPrice').textContent=money(price);$('#modalOldPrice').textContent=old>price?money(old):'';$('#modalDiscount').textContent=discount?'-'+discount+'%':'';$('#modalDiscount').classList.toggle('hidden',!discount);$('#modalDescription').textContent=p.description||'Diseño urbano, cómodo y fácil de combinar.';$('#modalStock').textContent=Number.isFinite(Number(p.stock))?'Stock disponible: '+p.stock:'';const specs=[['Categoría',p._categoryName||'Producto'],['Código',p.sku||p.code||('ROY-'+String(p.id).slice(-10))]];$('#specGrid').innerHTML=specs.map(([k,v])=>`<div class="spec-item"><b>${esc(k)}</b><span>${esc(v)}</span></div>`).join('');renderOptions();renderGallery();$('#productModal').classList.add('open');document.documentElement.style.overflow='hidden';document.body.style.overflow='hidden';$('#productModal').scrollTop=0};
 function colorVisual(name){const raw=String(name||'').trim();const key=raw.normalize('NFD').replace(/[\u0300-\u036f]/g,'').toLowerCase();const map={verde:['#239b43','#fff'],celeste:['#27b7e8','#07151b'],azul:['#1877f2','#fff'],gris:['#6b7280','#fff'],plomo:['#73777d','#fff'],rojo:['#e32636','#fff'],marron:['#7a4526','#fff'],cafe:['#70452d','#fff'],beige:['#e6d3ad','#17130d'],negro:['#111111','#fff'],blanco:['#ffffff','#111'],amarillo:['#f5cf25','#15120a'],naranja:['#f47b20','#fff'],rosado:['#ef77a8','#201018'],rosa:['#ef77a8','#201018'],morado:['#7b3fc6','#fff'],violeta:['#7851a9','#fff'],crema:['#f4ead2','#17130d'],vino:['#7b1835','#fff'],guinda:['#7b1835','#fff'],dorado:['#c89b2b','#151109'],plateado:['#b8bec7','#111'],turquesa:['#1cb7ad','#071513'],khaki:['#b6a06a','#15130d'],caqui:['#b6a06a','#15130d']};let pair=map[key];if(!pair){const css=raw.match(/^#(?:[0-9a-f]{3}|[0-9a-f]{6})$/i)?raw:'#d9dde3';pair=[css,'#111']}const hex=pair[0];let ring='rgba(141,245,0,.28)';if(/^#[0-9a-f]{6}$/i.test(hex)){const r=parseInt(hex.slice(1,3),16),g=parseInt(hex.slice(3,5),16),b=parseInt(hex.slice(5,7),16);ring=`rgba(${r},${g},${b},.30)`}return{bg:pair[0],text:pair[1],ring}}
@@ -409,17 +451,22 @@ function setView(view,{push=true,focusSearch=false}={}){const valid=['home','cat
 window.openFullGallery=()=>setView('gallery');window.openSocial=n=>{const u=normalizeUrl(getSocialUrl(n));if(!u)return toast('Esta red social aún no está configurada en el panel.');openSafe(u)};window.showCatalog=(focusSearch=false)=>setView('catalog',{focusSearch});window.scrollCatalog=window.showCatalog;window.goHome=()=>setView('home');window.toggleMobileMenu=force=>{$('#mobilePanel').classList.toggle('open',typeof force==='boolean'?force:!$('#mobilePanel').classList.contains('open'))};
 function viewFromLocation(){return location.hash==='#catalogo'?'catalog':location.hash==='#galeria'?'gallery':'home'}
 const initialView=viewFromLocation();
-let lastExitAttempt=0;
-// Navegación interna segura: catálogo/galería regresan primero al inicio.
+let exitAttemptCount=0;
+let exitAttemptTimer=0;
+let allowingExit=false;
 history.replaceState({royRoot:true,royView:'home'},'',location.pathname+location.search+'#inicio');
-history.pushState({royView:initialView},'',initialView==='catalog'?'#catalogo':initialView==='gallery'?'#galeria':'#inicio');
-window.addEventListener('popstate',e=>{
+history.pushState({royGuard:true,royView:initialView},'',initialView==='catalog'?'#catalogo':initialView==='gallery'?'#galeria':'#inicio');
+window.addEventListener('popstate',()=>{
+ if(allowingExit)return;
  const current=document.body.dataset.view||'home';
- if(current!=='home'){setView('home',{push:false});history.pushState({royView:'home'},'','#inicio');return}
- const now=Date.now();
- if(now-lastExitAttempt>2200){lastExitAttempt=now;history.pushState({royView:'home'},'','#inicio');toast('Presiona atrás nuevamente para salir de ROY');return}
- // Segundo intento cercano: se permite la salida normal del navegador.
- history.back();
+ if(current!=='home'){setView('home',{push:false});history.pushState({royGuard:true,royView:'home'},'','#inicio');exitAttemptCount=0;return}
+ exitAttemptCount+=1;
+ clearTimeout(exitAttemptTimer);
+ exitAttemptTimer=setTimeout(()=>{exitAttemptCount=0},4200);
+ if(exitAttemptCount===1){history.pushState({royGuard:true,royView:'home'},'','#inicio');toast('Presiona atrás dos veces más para salir de ROY');return}
+ if(exitAttemptCount===2){history.pushState({royGuard:true,royView:'home'},'','#inicio');toast('Presiona atrás una vez más para salir');return}
+ allowingExit=true;
+ history.go(-2);
 });
 setView(initialView,{push:false});
 document.addEventListener('keydown',e=>{if(e.key==='Escape'){closeProduct();toggleMobileMenu(false)}});document.addEventListener('click',e=>{if(!e.target.closest('.mobile-panel')&&!e.target.closest('.mobile-menu-btn'))toggleMobileMenu(false)});window.addEventListener('resize',()=>{if(innerWidth>980)toggleMobileMenu(false)});document.addEventListener('visibilitychange',()=>{if(!document.hidden){applySettings();renderMediaPreview();renderProducts()}});window.addEventListener('beforeunload',stopRealtime);ensureSocialIcons();init();
