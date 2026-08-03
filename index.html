@@ -8,7 +8,7 @@
 <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
 <meta http-equiv="Pragma" content="no-cache">
 <meta http-equiv="Expires" content="0">
-<meta name="app-version" content="ROY-CATALOG-FIREBASE-ORDERS-3.1-20260803">
+<meta name="app-version" content="ROY-CATALOG-WHATSAPP-PC-QR-3.2-20260803">
 <meta name="referrer" content="strict-origin-when-cross-origin">
 <meta http-equiv="X-Content-Type-Options" content="nosniff">
 <title>ROY | Catálogo</title>
@@ -579,8 +579,8 @@ body,header,.mobile-panel,footer{background-color:var(--bg)}
         <label><span>DNI</span><input id="royCustomerDni" name="dni" type="text" inputmode="numeric" autocomplete="off" maxlength="8" enterkeyhint="next" placeholder="8 dígitos" required><small id="royErrorDni" class="roy-field-error" aria-live="polite"></small></label>
         <label><span>Celular / WhatsApp</span><input id="royCustomerPhone" name="tel" type="tel" inputmode="tel" autocomplete="tel-national" enterkeyhint="next" placeholder="Número de contacto" required><small id="royErrorPhone" class="roy-field-error" aria-live="polite"></small></label>
         <div id="royHomeDeliveryFields" class="roy-delivery-section">
-          <label><span>Ciudad o distrito</span><input id="royCustomerCity" name="address-level2" type="text" autocomplete="address-level2" enterkeyhint="next" placeholder="Ej.: Cajamarca" required><small id="royErrorCity" class="roy-field-error" aria-live="polite"></small></label>
-          <label class="full"><span>Dirección exacta</span><input id="royCustomerAddress" name="street-address" type="text" autocomplete="street-address" enterkeyhint="next" placeholder="Calle, número, urbanización" required><small id="royErrorAddress" class="roy-field-error" aria-live="polite"></small></label>
+          <label><span>Ciudad-Distrito de recojo</span><input id="royCustomerCity" name="address-level2" type="text" autocomplete="address-level2" enterkeyhint="next" placeholder="Ej.: Cajamarca" required><small id="royErrorCity" class="roy-field-error" aria-live="polite"></small></label>
+          <label class="full"><span>sede de recojo</span><input id="royCustomerAddress" name="street-address" type="text" autocomplete="street-address" enterkeyhint="next" placeholder="Calle, número, urbanización" required><small id="royErrorAddress" class="roy-field-error" aria-live="polite"></small></label>
           <label class="full"><span>Referencia</span><textarea id="royCustomerReference" name="address-line2" autocomplete="address-line2" enterkeyhint="done" placeholder="Ej.: frente al parque, puerta negra"></textarea></label>
         </div>
         <div id="royPickupFields" class="roy-delivery-section hidden">
@@ -911,70 +911,121 @@ window.finishRoyCartWhatsApp=async()=>{
  const message=buildRoyWhatsApp(order);
  const encoded=encodeURIComponent(message);
  const isMobile=/Android|iPhone|iPad|iPod|Mobile/i.test(navigator.userAgent);
- const whatsappUrl=isMobile
-  ? 'https://api.whatsapp.com/send?phone='+phone+'&text='+encoded
-  : 'https://web.whatsapp.com/send?phone='+phone+'&text='+encoded;
+
+ // URL universal: en celular abre la app; en PC intenta WhatsApp Desktop
+ // y, si no está disponible, permite continuar en WhatsApp Web.
+ const universalUrl='https://wa.me/'+phone+'?text='+encoded;
+ const desktopAppUrl='whatsapp://send?phone='+phone+'&text='+encoded;
 
  royOrderSaving=true;
  const finishButton=document.querySelector('[onclick="finishRoyCartWhatsApp()"]');
  const oldHtml=finishButton?.innerHTML||'';
  if(finishButton){
   finishButton.disabled=true;
-  finishButton.innerHTML='<i class="fa-solid fa-spinner fa-spin"></i> Abriendo WhatsApp...';
+  finishButton.innerHTML='<i class="fa-solid fa-spinner fa-spin"></i> Preparando pedido...';
  }
 
- // Guardar respaldo local antes de abrir WhatsApp.
+ // Guardar el pedido localmente antes de cualquier redirección.
  try{
   localStorage.setItem('roy_pending_order',JSON.stringify(order));
   localStorage.setItem('roy_last_whatsapp_message',message);
  }catch(_){ }
 
- // Copiar el formulario al portapapeles como respaldo. No bloquea la compra.
+ // Registrar el pedido en Firebase en segundo plano. El registro no depende
+ // de que el cliente tenga WhatsApp vinculado en esta computadora.
+ const firebaseSave=saveRoyOrderToFirebase(order)
+  .then(()=>{
+   try{localStorage.removeItem('roy_pending_order')}catch(_){ }
+   return true;
+  })
+  .catch(err=>{
+   console.error('ROY guardar pedido:',err);
+   return false;
+  });
+
+ // Copiar el mensaje como respaldo sin bloquear la compra.
  try{
-  if(navigator.clipboard&&window.isSecureContext)await navigator.clipboard.writeText(message);
+  if(navigator.clipboard&&window.isSecureContext){
+   navigator.clipboard.writeText(message).catch(()=>{});
+  }
  }catch(_){ }
 
- // IMPORTANTE: abrir WhatsApp directamente durante la acción del usuario.
- // No esperamos a Firebase, porque los navegadores bloquean pestañas tardías.
- let whatsappWindow=null;
- try{
-  whatsappWindow=window.open(whatsappUrl,'roy_whatsapp_order');
- }catch(_){whatsappWindow=null}
-
- if(!whatsappWindow){
-  // Si el navegador bloquea la pestaña, se crea un enlace visible y se intenta
-  // abrir en la misma pestaña después de iniciar el guardado.
+ function showRoyWhatsAppFallback(){
   let fallback=document.getElementById('royWhatsAppFallback');
   if(!fallback){
    fallback=document.createElement('div');
    fallback.id='royWhatsAppFallback';
-   fallback.style.cssText='position:fixed;inset:0;z-index:1000000;background:rgba(0,0,0,.88);display:grid;place-items:center;padding:20px';
-   fallback.innerHTML='<div style="width:min(420px,100%);background:#111;border:1px solid #D4AF37;border-radius:18px;padding:22px;text-align:center;color:#fff"><h3 style="margin:0 0 8px;color:#D4AF37">Tu pedido está listo</h3><p style="font-size:13px;line-height:1.5;margin:0 0 16px">El navegador bloqueó la apertura automática. Pulsa el botón para enviar todo el pedido.</p><a id="royWhatsAppFallbackLink" style="display:block;background:#D4AF37;color:#080808;text-decoration:none;font-weight:900;padding:14px;border-radius:12px">ABRIR WHATSAPP</a><button id="royWhatsAppFallbackClose" style="margin-top:10px;background:transparent;color:#fff;border:0;padding:8px">Cerrar</button></div>';
+   fallback.style.cssText='position:fixed;inset:0;z-index:1000000;background:rgba(0,0,0,.9);display:grid;place-items:center;padding:18px;overflow:auto';
+   fallback.innerHTML=`
+    <div style="width:min(460px,100%);background:#111;border:1px solid #D4AF37;border-radius:20px;padding:20px;text-align:center;color:#fff;box-shadow:0 24px 70px rgba(0,0,0,.55)">
+     <h3 style="margin:0 0 8px;color:#D4AF37;font-size:20px">Tu pedido ya está preparado</h3>
+     <p style="font-size:13px;line-height:1.5;margin:0 0 14px;color:#ddd">Si esta computadora no tiene WhatsApp vinculado, escanea el código con tu celular. El mensaje completo aparecerá listo para enviarse.</p>
+     <img id="royWhatsAppQr" alt="Código QR para abrir WhatsApp" style="display:block;width:190px;height:190px;margin:0 auto 14px;background:#fff;border-radius:12px;padding:8px" />
+     <a id="royWhatsAppFallbackLink" style="display:block;background:#D4AF37;color:#080808;text-decoration:none;font-weight:900;padding:14px;border-radius:12px;margin-bottom:8px">ABRIR WHATSAPP</a>
+     <button id="royWhatsAppCopyMessage" style="width:100%;background:#202020;color:#fff;border:1px solid #555;font-weight:800;padding:12px;border-radius:12px">COPIAR PEDIDO</button>
+     <p style="font-size:11px;line-height:1.45;color:#aaa;margin:12px 0 0">El pedido también se registra en el panel administrativo aunque WhatsApp no esté vinculado en esta PC.</p>
+     <button id="royWhatsAppFallbackClose" style="margin-top:10px;background:transparent;color:#fff;border:0;padding:8px;cursor:pointer">Cerrar</button>
+    </div>`;
    document.body.appendChild(fallback);
    fallback.querySelector('#royWhatsAppFallbackClose').onclick=()=>fallback.remove();
   }
   const link=fallback.querySelector('#royWhatsAppFallbackLink');
-  link.href=whatsappUrl;
+  link.href=universalUrl;
   link.target='_blank';
+  link.rel='noopener noreferrer';
+  const qr=fallback.querySelector('#royWhatsAppQr');
+  // QR remoto únicamente como respaldo visual para pasar el pedido al celular.
+  qr.src='https://api.qrserver.com/v1/create-qr-code/?size=300x300&data='+encodeURIComponent(universalUrl);
+  fallback.querySelector('#royWhatsAppCopyMessage').onclick=async()=>{
+   try{
+    await navigator.clipboard.writeText(message);
+    toast('Pedido copiado. Pégalo en WhatsApp.');
+   }catch(_){
+    const area=document.createElement('textarea');
+    area.value=message;area.style.position='fixed';area.style.opacity='0';
+    document.body.appendChild(area);area.select();document.execCommand('copy');area.remove();
+    toast('Pedido copiado. Pégalo en WhatsApp.');
+   }
+  };
   fallback.style.display='grid';
  }
 
- try{
-  // Firebase se guarda en paralelo, pero ya no controla la apertura de WhatsApp.
-  await saveRoyOrderToFirebase(order);
-  try{localStorage.removeItem('roy_pending_order')}catch(_){ }
-  toast(`Pedido ${orderId} registrado. WhatsApp fue abierto con toda la información.`);
+ // En celular NO se muestra el panel con QR. Se limpia la compra antes de
+ // salir de la página y luego se abre WhatsApp directamente con todo el pedido.
+ // En computadora se conserva el respaldo con QR porque puede no existir una
+ // sesión de WhatsApp vinculada.
+ let checkoutCleared=false;
+ if(isMobile){
   resetRoyCheckoutForNextPurchase();
- }catch(err){
-  console.error('ROY guardar pedido:',err);
-  // WhatsApp ya se abrió. El pedido queda localmente como pendiente para no perderlo.
-  toast('WhatsApp fue abierto. Firebase no confirmó el registro; el pedido quedó guardado como pendiente en este dispositivo.');
- }finally{
-  royOrderSaving=false;
-  if(finishButton){
-   finishButton.disabled=false;
-   finishButton.innerHTML=oldHtml||'<i class="fa-brands fa-whatsapp"></i> Finalizar todo por WhatsApp';
+  checkoutCleared=true;
+  try{
+   window.location.assign(universalUrl);
+  }catch(_){
+   window.open(universalUrl,'_blank','noopener,noreferrer');
   }
+ }else{
+  let opened=false;
+  try{
+   const w=window.open(desktopAppUrl,'_blank');
+   opened=!!w;
+  }catch(_){opened=false}
+  // Mostrar siempre el respaldo en PC: no es posible detectar de forma fiable
+  // si el usuario tiene una sesión de WhatsApp vinculada.
+  setTimeout(showRoyWhatsAppFallback,opened?700:0);
+ }
+
+ const saved=await firebaseSave;
+ if(saved){
+  toast(`Pedido ${orderId} registrado. Continúa el envío por WhatsApp.`);
+  if(!checkoutCleared)resetRoyCheckoutForNextPurchase();
+ }else{
+  toast('El pedido quedó guardado como pendiente en este dispositivo. WhatsApp puede continuar normalmente.');
+ }
+
+ royOrderSaving=false;
+ if(finishButton){
+  finishButton.disabled=false;
+  finishButton.innerHTML=oldHtml||'<i class="fa-brands fa-whatsapp"></i> Finalizar todo por WhatsApp';
  }
 };
 state.cart=loadRoyCart();
