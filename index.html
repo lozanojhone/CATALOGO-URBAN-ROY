@@ -543,12 +543,12 @@ body,header,.mobile-panel,footer{background-color:var(--bg)}
         <label><span>Celular / WhatsApp</span><input id="royCustomerPhone" name="tel" type="tel" inputmode="tel" autocomplete="tel-national" enterkeyhint="next" placeholder="Número de contacto" required></label>
         <div id="royHomeDeliveryFields" class="roy-delivery-section">
           <label><span>Ciudad o distrito</span><input id="royCustomerCity" name="address-level2" type="text" autocomplete="address-level2" enterkeyhint="next" placeholder="Ej.: Cajamarca" required></label>
-          <label class="full"><span>Dirección-cede de recojo</span><input id="royCustomerAddress" name="street-address" type="text" autocomplete="street-address" enterkeyhint="next" placeholder="Calle, número, urbanización" required></label>
+          <label class="full"><span>Dirección exacta</span><input id="royCustomerAddress" name="street-address" type="text" autocomplete="street-address" enterkeyhint="next" placeholder="Calle, número, urbanización" required></label>
           <label class="full"><span>Referencia</span><textarea id="royCustomerReference" name="address-line2" autocomplete="address-line2" enterkeyhint="done" placeholder="Ej.: frente al parque, puerta negra"></textarea></label>
         </div>
         <div id="royPickupFields" class="roy-delivery-section hidden">
           <label class="full"><span>Sede de recojo</span><select id="royPickupBranch" onchange="updateRoyPickupSummary()"><option value="principal">Tienda principal</option></select></label>
-          <div class="roy-pickup-card"><b><i class="fa-solid fa-location-dot"></i> Dirección </b><span id="royPickupAddress">Dirección de la tienda</span><br><span id="royPickupCity"></span></div>
+          <div class="roy-pickup-card"><b><i class="fa-solid fa-location-dot"></i> Dirección fija de recojo</b><span id="royPickupAddress">Dirección de la tienda</span><br><span id="royPickupCity"></span></div>
         </div>
       </form>
       <div class="roy-cart-actions">
