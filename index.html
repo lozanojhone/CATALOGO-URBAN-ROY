@@ -223,6 +223,22 @@ body[data-view="gallery"] #fullGallery{display:block!important;min-height:calc(1
 .media-visual video{width:100%;height:100%;object-fit:cover;background:#050505}
 .media-error-compact{height:100%;display:grid;place-items:center;padding:18px;text-align:center;background:#111;color:#ddd}
 .media-error-compact strong{display:block;color:#fff;margin-bottom:6px}
+
+/* ROY CUPONES DEL SISTEMA PRINCIPAL */
+.roy-coupon-box{margin:0 0 11px;padding:10px;border:1px solid #30291b;border-radius:12px;background:#12100c}
+.roy-coupon-title{display:flex;align-items:center;justify-content:space-between;gap:10px;margin-bottom:7px;color:#eee;font-size:10px;font-weight:900;letter-spacing:.06em;text-transform:uppercase}
+.roy-coupon-row{display:grid;grid-template-columns:minmax(0,1fr) auto;gap:7px}
+.roy-coupon-row input{min-width:0;width:100%;border:1px solid #3d3424;border-radius:9px;background:#090909;color:#fff;padding:9px 10px;font-size:11px;text-transform:uppercase;outline:0}
+.roy-coupon-row input:focus{border-color:#d4af37;box-shadow:0 0 0 2px rgba(212,175,55,.12)}
+.roy-coupon-row button{border:1px solid #d4af37;border-radius:9px;background:#d4af37;color:#090909;padding:8px 11px;font-size:9px;font-weight:950;cursor:pointer;white-space:nowrap}
+.roy-coupon-status{display:none;margin-top:7px;padding:7px 9px;border-radius:8px;font-size:9px;line-height:1.35}
+.roy-coupon-status.show{display:block}.roy-coupon-status.success{background:rgba(212,175,55,.12);color:#f2d675;border:1px solid rgba(212,175,55,.35)}
+.roy-coupon-status.error{background:rgba(255,80,80,.1);color:#ff9b94;border:1px solid rgba(255,80,80,.28)}
+.roy-coupon-summary{display:none;margin:0 0 9px;padding:8px 10px;border-radius:9px;background:#17140d;border:1px solid rgba(212,175,55,.3);font-size:10px;color:#ddd}
+.roy-coupon-summary.show{display:flex;align-items:center;justify-content:space-between;gap:10px}
+.roy-coupon-summary b{color:#f2d675}.roy-coupon-summary button{border:0;background:none;color:#ff9b94;font-size:9px;font-weight:900;cursor:pointer}
+.roy-cart-breakdown{display:grid;gap:5px;margin-bottom:9px}.roy-cart-breakdown>div{display:flex;justify-content:space-between;gap:10px;color:#aaa;font-size:10px}.roy-cart-breakdown b{color:#fff}.roy-cart-breakdown .discount b{color:#f2d675}
+@media(max-width:520px){.roy-coupon-box{padding:8px}.roy-coupon-row input{padding:8px 9px;font-size:10px}.roy-coupon-row button{padding:7px 9px}.roy-cart-breakdown>div{font-size:9px}}
 </style>
 
 <style id="roy-v16-video-mobile-fix">
@@ -524,7 +540,17 @@ body,header,.mobile-panel,footer{background-color:var(--bg)}
     <div class="roy-cart-head"><h2>Tu <span>carrito</span></h2><button class="roy-cart-close" type="button" onclick="closeRoyCart()" aria-label="Cerrar">×</button></div>
     <div id="royCartList" class="roy-cart-list"></div>
     <div class="roy-cart-footer">
+      <div class="roy-cart-breakdown">
+        <div><span>Subtotal</span><b id="royCartSubtotal">S/ 0.00</b></div>
+        <div class="discount"><span>Descuento</span><b id="royCartDiscount">- S/ 0.00</b></div>
+      </div>
       <div class="roy-cart-total"><span>Total del pedido</span><b id="royCartTotal">S/ 0.00</b></div>
+      <div class="roy-coupon-box">
+        <div class="roy-coupon-title"><span><i class="fa-solid fa-ticket"></i> Cupón de descuento</span><small>Promociones ROY</small></div>
+        <div class="roy-coupon-row"><input id="royCouponCode" type="text" inputmode="text" autocomplete="off" maxlength="30" placeholder="Ingresa tu código" onkeydown="if(event.key==='Enter'){event.preventDefault();applyRoyCoupon()}"><button id="royCouponApplyBtn" type="button" onclick="applyRoyCoupon()">APLICAR</button></div>
+        <div id="royCouponStatus" class="roy-coupon-status" aria-live="polite"></div>
+      </div>
+      <div id="royCouponSummary" class="roy-coupon-summary"><span>Cupón <b id="royCouponAppliedCode">—</b> aplicado</span><button type="button" onclick="removeRoyCoupon()">QUITAR</button></div>
       <div class="roy-cart-data-head">
         <b>Datos para el pedido</b>
         <button class="roy-cart-autofill" type="button" onclick="fillRoyCustomerData()"><i class="fa-solid fa-wand-magic-sparkles"></i> Llenar datos</button>
@@ -616,7 +642,7 @@ const EMBEDDED_OFFICIAL_LOGO='data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAnAA
 const DEFAULT_OFFICIAL_STORE_URL='https://lozanojhone.github.io/ROY/#inicio';
 const firebaseConfig={apiKey:'AIzaSyBfVsL9sVnrGyu30Ek4KzhLRqORaAr4pkE',authDomain:'el-mashita.firebaseapp.com',projectId:'el-mashita',storageBucket:'el-mashita.firebasestorage.app',messagingSenderId:'667981540511',appId:'1:667981540511:web:08df9f8fb54128c9cd868aa'};
 const defaults={storeName:'ROY',whatsapp:'51926884544',email:'roycajamarca@gmail.com',hours:'Lunes a sábado: 8:00 AM a 8:00 PM',address:'Cajamarca, Perú',facebook:'',instagram:'',tiktok:'',logo:EMBEDDED_OFFICIAL_LOGO,officialStoreUrl:DEFAULT_OFFICIAL_STORE_URL,primaryColor:'#D4AF37',secondaryColor:'#FFFFFF',backgroundColor:'#080808',textColor:'#FFFFFF'};
-const state={products:[],rawProducts:[],categories:[],media:[],productImageAssets:new Map(),settings:{...defaults},selected:null,color:'',size:'',qty:1,activeImages:[],activeCategory:'',unsubscribers:[],cart:[]};
+const state={products:[],rawProducts:[],categories:[],media:[],promotions:[],coupon:null,productImageAssets:new Map(),settings:{...defaults},selected:null,color:'',size:'',qty:1,activeImages:[],activeCategory:'',unsubscribers:[],cart:[]};
 const $=s=>document.querySelector(s);const esc=v=>String(v??'').replace(/[&<>'"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;',"'":'&#39;','"':'&quot;'}[c]));
 const categorySelect=$('#category');if(categorySelect){categorySelect.addEventListener('change',event=>{state.activeCategory=event.target.value;renderProducts();});}
 const searchInput=$('#search');
@@ -658,20 +684,78 @@ async function tryRoyContactPicker(){if(!('contacts' in navigator)||!('ContactsM
 window.fillRoyCustomerData=async()=>{if(renderRoyCustomerSuggestions())return;const picked=await tryRoyContactPicker();if(picked)return;toast('Usa una sugerencia segura de tu navegador.');const name=$('#royCustomerName');name?.focus();setTimeout(()=>name?.click(),80)};
 function persistRoyCart(){try{localStorage.setItem('roy_catalog_cart_v2',JSON.stringify(state.cart))}catch(err){console.warn('ROY cart save:',err)}renderRoyCartCount()}
 function royCartQuantity(){return state.cart.reduce((sum,item)=>sum+Math.max(1,Number(item.qty)||1),0)}
-function royCartTotal(){return state.cart.reduce((sum,item)=>sum+(Number(item.price)||0)*Math.max(1,Number(item.qty)||1),0)}
+function royCartSubtotal(){return state.cart.reduce((sum,item)=>sum+(Number(item.price)||0)*Math.max(1,Number(item.qty)||1),0)}
+function royPromotionCode(p){return String(p?.code||p?.promoCode||p?.couponCode||p?.coupon||p?.id||'').trim().toUpperCase()}
+function royPromotionNumber(p,names){for(const name of names){const value=Number(p?.[name]);if(Number.isFinite(value))return value}return 0}
+function royPromotionDate(value,endOfDay=false){if(!value)return null;const d=value?.toDate?value.toDate():new Date(value);if(Number.isNaN(d.getTime()))return null;if(endOfDay&&/^\d{4}-\d{2}-\d{2}$/.test(String(value)))d.setHours(23,59,59,999);return d}
+function royPromotionUsable(p,subtotal=royCartSubtotal()){
+ if(!p||p.active===false||p.enabled===false||p.visible===false)return {ok:false,message:'Este cupón no está activo.'};
+ const status=String(p.status||'').toLowerCase();if(['inactive','inactivo','expired','vencido','disabled'].includes(status))return {ok:false,message:'Este cupón no está activo.'};
+ const now=new Date(),start=royPromotionDate(p.start||p.startDate||p.fechaInicio||p.validFrom),end=royPromotionDate(p.end||p.endDate||p.fechaFin||p.validUntil,true);
+ if(start&&now<start)return {ok:false,message:'Este cupón todavía no está vigente.'};
+ if(end&&now>end)return {ok:false,message:'Este cupón ya venció.'};
+ const min=royPromotionNumber(p,['minimum','minimumAmount','minAmount','minPurchase','minimumPurchase']);
+ if(min>0&&subtotal<min)return {ok:false,message:`Compra mínima requerida: ${money(min)}.`};
+ const uses=royPromotionNumber(p,['uses','used','usageCount']),limit=royPromotionNumber(p,['limit','usageLimit','maxUses']);
+ if(limit>0&&uses>=limit)return {ok:false,message:'Este cupón alcanzó el límite de usos.'};
+ return {ok:true,message:''};
+}
+function royCouponDiscount(subtotal=royCartSubtotal()){
+ const p=state.coupon;if(!p)return 0;
+ const valid=royPromotionUsable(p,subtotal);if(!valid.ok)return 0;
+ const percent=royPromotionNumber(p,['discount','discountPercent','percentage','percent']);
+ const fixed=royPromotionNumber(p,['amount','fixedAmount','discountAmount','value']);
+ let amount=percent>0?subtotal*Math.min(percent,100)/100:fixed;
+ const max=royPromotionNumber(p,['maxDiscount','maximumDiscount']);if(max>0)amount=Math.min(amount,max);
+ return Math.max(0,Math.min(subtotal,amount||0));
+}
+function royCartDiscount(){return royCouponDiscount(royCartSubtotal())}
+function royCartTotal(){return Math.max(0,royCartSubtotal()-royCartDiscount())}
 function renderRoyCartCount(){const count=royCartQuantity(),badge=$('#royCartCount'),floating=$('#royCartFloat');if(badge)badge.textContent=String(count);if(floating)floating.classList.toggle('show',count>0)}
 function productCartImage(p,color){const variants=p?.colorImages||p?.imagesByColor||{};const specific=variants?.[color];if(Array.isArray(specific)&&specific[0])return normalizeAssetUrl(specific[0]);if(typeof specific==='string'&&specific)return normalizeAssetUrl(specific);const images=productImages(p,'');return normalizeAssetUrl(images[0]||p?.image||p?.imageUrl||PRODUCT_FALLBACK)}
 function addSelectedToRoyCart(){const p=state.selected;if(!p){toast('No se encontró el producto seleccionado.');return}const colors=p.colors?.length?p.colors:['Único'];if(colors.length>1&&!state.color){toast('Selecciona un color antes de añadir al carrito.');$('#colors')?.scrollIntoView({behavior:'smooth',block:'center'});return}const sizes=p.sizes?.length?p.sizes:['Única'];if(sizes.length>1&&!state.size){toast('Selecciona una talla antes de añadir al carrito.');$('#sizes')?.scrollIntoView({behavior:'smooth',block:'center'});return}const color=state.color||colors[0]||'Único',size=state.size||sizes[0]||'Única',qty=Math.max(1,Number(state.qty)||1),productId=String(p.id||p.sku||p.name),key=[productId,color,size].join('||');const found=state.cart.find(item=>item.key===key);const stock=Math.max(1,Number(p.stock)||99);if(found)found.qty=Math.min(stock,Number(found.qty||0)+qty);else state.cart.push({key,productId,name:p.name||'Producto ROY',sku:p.sku||p.code||productId,category:p._categoryName||p.category||'Sin categoría',color,size,qty:Math.min(stock,qty),price:Number(p.price)||0,image:productCartImage(p,color)});persistRoyCart();renderRoyCart();window.closeProduct?.();const summary=$('#royAddedSummary');if(summary)summary.textContent=`${qty} × ${p.name||'Producto ROY'} · ${color} · ${size}`;setTimeout(()=>$('#royAddedChoice')?.classList.add('open'),120)}
 window.continueRoyShopping=()=>{$('#royAddedChoice')?.classList.remove('open');setView('catalog',{push:false});window.scrollTo({top:Math.max(0,window.__royCatalogScroll||0),behavior:'smooth'})};
 window.goToRoyCart=()=>{$('#royAddedChoice')?.classList.remove('open');openRoyCart()};
-function renderRoyCart(){const box=$('#royCartList'),total=$('#royCartTotal');if(!box)return;box.innerHTML=state.cart.length?state.cart.map(item=>`<article class="roy-cart-item"><img src="${esc(item.image||PRODUCT_FALLBACK)}" alt="${esc(item.name)}" onerror="this.src='${PRODUCT_FALLBACK}'"><div><h3>${esc(item.name)}</h3><small>${esc(item.category||'Producto')}<br>Color: <b>${esc(item.color||'Único')}</b> · Talla: <b>${esc(item.size||'Única')}</b></small><span class="line-total">${money((Number(item.price)||0)*(Number(item.qty)||1))}</span><div class="roy-cart-qty"><button type="button" onclick="changeRoyCartQty('${encodeURIComponent(item.key)}',-1)">−</button><span>${Number(item.qty)||1}</span><button type="button" onclick="changeRoyCartQty('${encodeURIComponent(item.key)}',1)">+</button></div></div><button class="roy-cart-remove" type="button" onclick="removeRoyCartItem('${encodeURIComponent(item.key)}')" aria-label="Eliminar">×</button></article>`).join(''):`<div class="roy-cart-empty"><div><i class="fa-solid fa-bag-shopping"></i><b>Tu carrito está vacío</b><p>Agrega prendas con su color, talla y cantidad.</p></div></div>`;if(total)total.textContent=money(royCartTotal());renderRoyCartCount()}
+function setRoyCouponStatus(message,type=''){
+ const el=$('#royCouponStatus');if(!el)return;el.textContent=message||'';el.className='roy-coupon-status'+(message?' show':'')+(type?' '+type:'');
+}
+function renderRoyCoupon(){
+ const input=$('#royCouponCode'),summary=$('#royCouponSummary'),code=$('#royCouponAppliedCode');
+ if(state.coupon){if(input&&!input.value)input.value=royPromotionCode(state.coupon);if(code)code.textContent=royPromotionCode(state.coupon);summary?.classList.add('show')}
+ else{summary?.classList.remove('show');if(code)code.textContent='—'}
+}
+async function loadRoyPromotionsFresh(){
+ if(!royCatalogDb)throw new Error('Firebase todavía está conectando.');
+ const snap=await royWithTimeout(getDocsFromServer(collection(royCatalogDb,'roy_promotions')),8000,'Las promociones tardaron demasiado en cargar.');
+ state.promotions=snap.docs.map(d=>({id:d.id,...d.data()}));return state.promotions;
+}
+window.applyRoyCoupon=async()=>{
+ const input=$('#royCouponCode'),button=$('#royCouponApplyBtn'),code=String(input?.value||'').trim().toUpperCase();
+ if(!code){setRoyCouponStatus('Escribe un código de cupón.','error');input?.focus();return}
+ const old=button?.textContent;if(button){button.disabled=true;button.textContent='VALIDANDO...'}
+ try{
+  if(!state.promotions.length)await loadRoyPromotionsFresh();
+  const promo=state.promotions.find(p=>royPromotionCode(p)===code);
+  if(!promo){state.coupon=null;renderRoyCart();setRoyCouponStatus('El código ingresado no existe.','error');return}
+  const valid=royPromotionUsable(promo);if(!valid.ok){state.coupon=null;renderRoyCart();setRoyCouponStatus(valid.message,'error');return}
+  state.coupon=promo;renderRoyCart();setRoyCouponStatus(`Cupón ${code} aplicado. Ahorras ${money(royCartDiscount())}.`,'success');
+ }catch(err){console.error('ROY cupón:',err);setRoyCouponStatus(err?.message||'No se pudo validar el cupón.','error')}
+ finally{if(button){button.disabled=false;button.textContent=old||'APLICAR'}}
+};
+window.removeRoyCoupon=()=>{state.coupon=null;const input=$('#royCouponCode');if(input)input.value='';setRoyCouponStatus('');renderRoyCart();toast('Cupón retirado')};
+function renderRoyCart(){
+ const box=$('#royCartList'),total=$('#royCartTotal'),subtotal=$('#royCartSubtotal'),discount=$('#royCartDiscount');if(!box)return;
+ if(state.coupon&&!royPromotionUsable(state.coupon).ok)state.coupon=null;
+ box.innerHTML=state.cart.length?state.cart.map(item=>`<article class="roy-cart-item"><img src="${esc(item.image||PRODUCT_FALLBACK)}" alt="${esc(item.name)}" onerror="this.src='${PRODUCT_FALLBACK}'"><div><h3>${esc(item.name)}</h3><small>${esc(item.category||'Producto')}<br>Color: <b>${esc(item.color||'Único')}</b> · Talla: <b>${esc(item.size||'Única')}</b></small><span class="line-total">${money((Number(item.price)||0)*(Number(item.qty)||1))}</span><div class="roy-cart-qty"><button type="button" onclick="changeRoyCartQty('${encodeURIComponent(item.key)}',-1)">−</button><span>${Number(item.qty)||1}</span><button type="button" onclick="changeRoyCartQty('${encodeURIComponent(item.key)}',1)">+</button></div></div><button class="roy-cart-remove" type="button" onclick="removeRoyCartItem('${encodeURIComponent(item.key)}')" aria-label="Eliminar">×</button></article>`).join(''):`<div class="roy-cart-empty"><div><i class="fa-solid fa-bag-shopping"></i><b>Tu carrito está vacío</b><p>Agrega prendas con su color, talla y cantidad.</p></div></div>`;
+ if(subtotal)subtotal.textContent=money(royCartSubtotal());if(discount)discount.textContent='- '+money(royCartDiscount());if(total)total.textContent=money(royCartTotal());renderRoyCoupon();renderRoyCartCount();
+}
 window.changeRoyCartQty=encoded=>{};
 window.changeRoyCartQty=(encoded,delta)=>{const key=decodeURIComponent(encoded),item=state.cart.find(x=>x.key===key);if(!item)return;item.qty=Math.max(1,Number(item.qty||1)+Number(delta||0));persistRoyCart();renderRoyCart()};
 window.removeRoyCartItem=encoded=>{const key=decodeURIComponent(encoded);state.cart=state.cart.filter(x=>x.key!==key);persistRoyCart();renderRoyCart()};
 window.clearRoyCart=()=>{if(!state.cart.length)return;if(!confirm('¿Vaciar todos los productos del carrito?'))return;state.cart=[];persistRoyCart();renderRoyCart();toast('Carrito vacío')};
 window.openRoyCart=()=>{const modal=$('#royCartModal'),saved=normalizeRoyCustomer(loadRoyCustomer());closeRoyCustomerSuggestions();applyRoyCustomerProfile(saved);renderRoyCart();updateRoyPickupSummary();modal?.classList.add('open');document.documentElement.style.overflow='hidden';document.body.style.overflow='hidden'};
 window.closeRoyCart=()=>{$('#royCartModal')?.classList.remove('open');document.documentElement.style.overflow='';document.body.style.overflow=''};
-function resetRoyCheckoutForNextPurchase(){state.cart=[];persistRoyCart();renderRoyCart();['royCustomerName','royCustomerDni','royCustomerPhone','royCustomerCity','royCustomerAddress','royCustomerReference'].forEach(id=>{const el=$('#'+id);if(el)el.value=''});if($('#royDeliveryHome'))$('#royDeliveryHome').checked=true;if($('#royDeliveryPickup'))$('#royDeliveryPickup').checked=false;updateRoyDeliveryMode();try{localStorage.removeItem('roy_catalog_customer_v2');localStorage.removeItem('roy_catalog_customer_v1')}catch{}closeRoyCustomerSuggestions();closeRoyCart()}
+function resetRoyCheckoutForNextPurchase(){state.cart=[];state.coupon=null;const couponInput=$('#royCouponCode');if(couponInput)couponInput.value='';setRoyCouponStatus('');persistRoyCart();renderRoyCart();['royCustomerName','royCustomerDni','royCustomerPhone','royCustomerCity','royCustomerAddress','royCustomerReference'].forEach(id=>{const el=$('#'+id);if(el)el.value=''});if($('#royDeliveryHome'))$('#royDeliveryHome').checked=true;if($('#royDeliveryPickup'))$('#royDeliveryPickup').checked=false;updateRoyDeliveryMode();try{localStorage.removeItem('roy_catalog_customer_v2');localStorage.removeItem('roy_catalog_customer_v1')}catch{}closeRoyCustomerSuggestions();closeRoyCart()}
 function validateRoyCustomer(customer){if(!customer.name)return 'Ingresa el nombre completo.';if(customer.dni.length!==8)return 'Ingresa un DNI válido de 8 dígitos.';if(customer.phone.replace(/\D/g,'').length<9)return 'Ingresa un celular válido.';if(customer.mode==='delivery'&&!customer.city)return 'Ingresa la ciudad o distrito.';if(customer.mode==='delivery'&&!customer.address)return 'Ingresa la dirección exacta.';return ''}
 function royOrderId(){
  const now=new Date();
@@ -706,8 +790,10 @@ function buildRoyOrder(customer,orderId){
   paymentStatus:'Pendiente',
   delivery,
   shippingCost:0,
-  discount:0,
-  subtotal:royCartTotal(),
+  couponCode:state.coupon?royPromotionCode(state.coupon):'',
+  couponDescription:state.coupon?String(state.coupon.description||state.coupon.name||'Descuento promocional'):'',
+  discount:royCartDiscount(),
+  subtotal:royCartSubtotal(),
   total:royCartTotal(),
   currency:'PEN',
   client:{
@@ -747,6 +833,7 @@ function buildRoyWhatsApp(order){
  order.items.forEach((item,index)=>{
   lines.push(`*${index+1}. ${item.name}*`,`🏷️ Código: ${item.sku||item.productId}`,`📁 Categoría: ${item.category}`,`🎨 Color: ${item.color}`,`📏 Talla: ${item.size}`,`🔢 Cantidad: ${item.qty}`,`💵 Precio unitario: ${money(item.price)}`,`💰 Subtotal: ${money(item.subtotal)}`,'');
  });
+ if(order.couponCode){lines.push(`🎟️ *Cupón:* ${order.couponCode}`,`💵 *Subtotal:* ${money(order.subtotal)}`,`🏷️ *Descuento:* - ${money(order.discount)}`,'')}
  lines.push(`🧾 *TOTAL GENERAL: ${money(order.total)}*`,'','El pedido ya fue registrado. Deseo confirmar disponibilidad y finalizar la compra.');
  return lines.filter(Boolean).join('\n');
 }
@@ -777,45 +864,70 @@ window.finishRoyCartWhatsApp=async()=>{
  const validation=validateRoyCustomer(customer);
  if(validation){toast(validation);return}
  rememberRoyCustomer(customer);
+
  const orderId=royOrderId();
  const order=buildRoyOrder(customer,orderId);
- const url='https://wa.me/'+phone+'?text='+encodeURIComponent(buildRoyWhatsApp(order));
+ const message=buildRoyWhatsApp(order);
+ const encoded=encodeURIComponent(message);
+ const isMobile=/Android|iPhone|iPad|iPod|Mobile/i.test(navigator.userAgent);
+ const whatsappUrl=isMobile
+  ? 'https://api.whatsapp.com/send?phone='+phone+'&text='+encoded
+  : 'https://web.whatsapp.com/send?phone='+phone+'&text='+encoded;
 
  royOrderSaving=true;
  const finishButton=document.querySelector('[onclick="finishRoyCartWhatsApp()"]');
  const oldHtml=finishButton?.innerHTML||'';
  if(finishButton){
   finishButton.disabled=true;
-  finishButton.innerHTML='<i class="fa-solid fa-spinner fa-spin"></i> Registrando pedido...';
+  finishButton.innerHTML='<i class="fa-solid fa-spinner fa-spin"></i> Abriendo WhatsApp...';
  }
 
- // Se abre una pestaña durante el clic para evitar el bloqueo de ventanas emergentes en PC.
- let popup=null;
+ // Guardar respaldo local antes de abrir WhatsApp.
  try{
-  popup=window.open('about:blank','roy_whatsapp_order');
-  if(popup&&!popup.closed){
-   popup.document.open();
-   popup.document.write('<!doctype html><html><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Pedido ROY</title></head><body style="margin:0;display:grid;place-items:center;min-height:100vh;background:#080808;color:#d4af37;font:700 15px Arial;text-align:center"><div>Registrando tu pedido...<br><small style="color:#fff;font-weight:400">No cierres esta ventana.</small></div></body></html>');
-   popup.document.close();
+  localStorage.setItem('roy_pending_order',JSON.stringify(order));
+  localStorage.setItem('roy_last_whatsapp_message',message);
+ }catch(_){ }
+
+ // Copiar el formulario al portapapeles como respaldo. No bloquea la compra.
+ try{
+  if(navigator.clipboard&&window.isSecureContext)await navigator.clipboard.writeText(message);
+ }catch(_){ }
+
+ // IMPORTANTE: abrir WhatsApp directamente durante la acción del usuario.
+ // No esperamos a Firebase, porque los navegadores bloquean pestañas tardías.
+ let whatsappWindow=null;
+ try{
+  whatsappWindow=window.open(whatsappUrl,'roy_whatsapp_order');
+ }catch(_){whatsappWindow=null}
+
+ if(!whatsappWindow){
+  // Si el navegador bloquea la pestaña, se crea un enlace visible y se intenta
+  // abrir en la misma pestaña después de iniciar el guardado.
+  let fallback=document.getElementById('royWhatsAppFallback');
+  if(!fallback){
+   fallback=document.createElement('div');
+   fallback.id='royWhatsAppFallback';
+   fallback.style.cssText='position:fixed;inset:0;z-index:1000000;background:rgba(0,0,0,.88);display:grid;place-items:center;padding:20px';
+   fallback.innerHTML='<div style="width:min(420px,100%);background:#111;border:1px solid #D4AF37;border-radius:18px;padding:22px;text-align:center;color:#fff"><h3 style="margin:0 0 8px;color:#D4AF37">Tu pedido está listo</h3><p style="font-size:13px;line-height:1.5;margin:0 0 16px">El navegador bloqueó la apertura automática. Pulsa el botón para enviar todo el pedido.</p><a id="royWhatsAppFallbackLink" style="display:block;background:#D4AF37;color:#080808;text-decoration:none;font-weight:900;padding:14px;border-radius:12px">ABRIR WHATSAPP</a><button id="royWhatsAppFallbackClose" style="margin-top:10px;background:transparent;color:#fff;border:0;padding:8px">Cerrar</button></div>';
+   document.body.appendChild(fallback);
+   fallback.querySelector('#royWhatsAppFallbackClose').onclick=()=>fallback.remove();
   }
- }catch(_){popup=null}
+  const link=fallback.querySelector('#royWhatsAppFallbackLink');
+  link.href=whatsappUrl;
+  link.target='_blank';
+  fallback.style.display='grid';
+ }
 
  try{
+  // Firebase se guarda en paralelo, pero ya no controla la apertura de WhatsApp.
   await saveRoyOrderToFirebase(order);
-  toast(`Pedido ${orderId} registrado. Abriendo WhatsApp...`);
-  // Limpiar únicamente después de confirmar la escritura.
+  try{localStorage.removeItem('roy_pending_order')}catch(_){ }
+  toast(`Pedido ${orderId} registrado. WhatsApp fue abierto con toda la información.`);
   resetRoyCheckoutForNextPurchase();
-  if(popup&&!popup.closed){
-   popup.location.href=url;
-  }else{
-   // En celular y en navegadores que bloqueen pestañas, usar la pestaña actual.
-   window.location.assign(url);
-  }
  }catch(err){
   console.error('ROY guardar pedido:',err);
-  if(popup&&!popup.closed)popup.close();
-  toast('NO SE REGISTRÓ EL PEDIDO: '+(err?.message||'Revisa tu conexión y las reglas de Firebase.'));
-  // El carrito y los datos permanecen para que el cliente pueda volver a intentar.
+  // WhatsApp ya se abrió. El pedido queda localmente como pendiente para no perderlo.
+  toast('WhatsApp fue abierto. Firebase no confirmó el registro; el pedido quedó guardado como pendiente en este dispositivo.');
  }finally{
   royOrderSaving=false;
   if(finishButton){
@@ -985,7 +1097,11 @@ async function init(){
   if('requestIdleCallback' in window) requestIdleCallback(loadMedia,{timeout:1200});
   else setTimeout(loadMedia,120);
 
-  Promise.allSettled([categoriesPromise,productsPromise,assetsPromise]).then(()=>renderProducts());
+  const promotionsPromise=getDocsFromServer(collection(db,'roy_promotions')).then(snap=>{
+   state.promotions=snap.docs.map(d=>({id:d.id,...d.data()}));
+  }).catch(err=>console.warn('Promociones:',err));
+
+  Promise.allSettled([categoriesPromise,productsPromise,assetsPromise,promotionsPromise]).then(()=>renderProducts());
 
   // 4) Mantener todos los datos sincronizados en tiempo real.
   state.unsubscribers.push(onSnapshot(collection(db,'roy_categories'),{includeMetadataChanges:true},snap=>{
@@ -1007,6 +1123,11 @@ async function init(){
    if(snap.metadata.fromCache&&navigator.onLine)return;
    state.media=snap.docs.map(d=>({id:d.id,...d.data()})).filter(m=>m.active!==false&&m.visible!==false);
    renderMediaPreview();
+  },handleError));
+  state.unsubscribers.push(onSnapshot(collection(db,'roy_promotions'),{includeMetadataChanges:true},snap=>{
+   if(snap.metadata.fromCache&&navigator.onLine)return;
+   state.promotions=snap.docs.map(d=>({id:d.id,...d.data()}));
+   if(state.coupon){const current=state.promotions.find(p=>royPromotionCode(p)===royPromotionCode(state.coupon));state.coupon=current&&royPromotionUsable(current).ok?current:null;renderRoyCart()}
   },handleError));
   state.unsubscribers.push(onSnapshot(collection(db,'roy_settings'),{includeMetadataChanges:true},snap=>{
    if(snap.metadata.fromCache&&navigator.onLine)return;
