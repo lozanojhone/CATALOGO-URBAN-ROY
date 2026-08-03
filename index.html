@@ -543,12 +543,12 @@ body,header,.mobile-panel,footer{background-color:var(--bg)}
         <label><span>Celular / WhatsApp</span><input id="royCustomerPhone" name="tel" type="tel" inputmode="tel" autocomplete="tel-national" enterkeyhint="next" placeholder="Número de contacto" required></label>
         <div id="royHomeDeliveryFields" class="roy-delivery-section">
           <label><span>Ciudad o distrito</span><input id="royCustomerCity" name="address-level2" type="text" autocomplete="address-level2" enterkeyhint="next" placeholder="Ej.: Cajamarca" required></label>
-          <label class="full"><span>Dirección-sede de recojo</span><input id="royCustomerAddress" name="street-address" type="text" autocomplete="street-address" enterkeyhint="next" placeholder="Calle, número, urbanización" required></label>
-          <label class="full"><span>Referencia-opcional</span><textarea id="royCustomerReference" name="address-line2" autocomplete="address-line2" enterkeyhint="done" placeholder="Ej.: frente al parque, puerta negra"></textarea></label>
+          <label class="full"><span>Dirección-cede de recojo</span><input id="royCustomerAddress" name="street-address" type="text" autocomplete="street-address" enterkeyhint="next" placeholder="Calle, número, urbanización" required></label>
+          <label class="full"><span>Referencia</span><textarea id="royCustomerReference" name="address-line2" autocomplete="address-line2" enterkeyhint="done" placeholder="Ej.: frente al parque, puerta negra"></textarea></label>
         </div>
         <div id="royPickupFields" class="roy-delivery-section hidden">
           <label class="full"><span>Sede de recojo</span><select id="royPickupBranch" onchange="updateRoyPickupSummary()"><option value="principal">Tienda principal</option></select></label>
-          <div class="roy-pickup-card"><b><i class="fa-solid fa-location-dot"></i> Dirección fisica de tienda</b><span id="royPickupAddress">Dirección de la tienda</span><br><span id="royPickupCity"></span></div>
+          <div class="roy-pickup-card"><b><i class="fa-solid fa-location-dot"></i> Dirección </b><span id="royPickupAddress">Dirección de la tienda</span><br><span id="royPickupCity"></span></div>
         </div>
       </form>
       <div class="roy-cart-actions">
@@ -750,46 +750,78 @@ function buildRoyWhatsApp(order){
  lines.push(`🧾 *TOTAL GENERAL: ${money(order.total)}*`,'','El pedido ya fue registrado. Deseo confirmar disponibilidad y finalizar la compra.');
  return lines.filter(Boolean).join('\n');
 }
+function royWithTimeout(promise,ms,message){
+ return Promise.race([
+  promise,
+  new Promise((_,reject)=>setTimeout(()=>reject(new Error(message||'La operación tardó demasiado.')),ms))
+ ]);
+}
 async function saveRoyOrderToFirebase(order){
- if(!royCatalogDb)throw new Error('Firebase todavía no terminó de conectar. Espera un momento y vuelve a intentar.');
- await setDoc(doc(royCatalogDb,'roy_orders',order.orderCode),order);
- const check=await getDocFromServer(doc(royCatalogDb,'roy_orders',order.orderCode));
- if(!check.exists())throw new Error('Firebase no confirmó el registro del pedido.');
- return check.data();
+ if(!royCatalogDb)throw new Error('Firebase todavía está conectando. Espera unos segundos y vuelve a intentarlo.');
+ const ref=doc(royCatalogDb,'roy_orders',order.orderCode);
+ await royWithTimeout(
+  setDoc(ref,order),
+  10000,
+  'Firebase tardó demasiado en guardar el pedido. Revisa tu conexión e inténtalo nuevamente.'
+ );
+ // La escritura confirmada por setDoc es suficiente. La lectura forzada al servidor
+ // podía quedar esperando indefinidamente en conexiones lentas o con caché offline.
+ return order;
 }
 window.finishRoyCartWhatsApp=async()=>{
  if(royOrderSaving)return;
  if(!state.cart.length){toast('Agrega al menos un producto al carrito.');return}
  const phone=cleanPhone(contactData().whatsapp);
  if(!phone){toast('Configura el WhatsApp de la tienda.');return}
- const customer=saveRoyCustomer(),validation=validateRoyCustomer(customer);
+ const customer=saveRoyCustomer();
+ const validation=validateRoyCustomer(customer);
  if(validation){toast(validation);return}
  rememberRoyCustomer(customer);
  const orderId=royOrderId();
  const order=buildRoyOrder(customer,orderId);
  const url='https://wa.me/'+phone+'?text='+encodeURIComponent(buildRoyWhatsApp(order));
- // Abrir inmediatamente para evitar que PC bloquee la pestaña después de esperar Firebase.
- const popup=window.open('about:blank','_blank');
- if(popup){
-  try{popup.document.write('<!doctype html><meta charset="utf-8"><title>Preparando pedido ROY</title><body style="margin:0;display:grid;place-items:center;min-height:100vh;background:#080808;color:#d4af37;font:700 16px Arial">Registrando tu pedido...</body>')}catch(_){ }
- }
+
  royOrderSaving=true;
  const finishButton=document.querySelector('[onclick="finishRoyCartWhatsApp()"]');
- const oldText=finishButton?.textContent||'';
- if(finishButton){finishButton.disabled=true;finishButton.textContent='REGISTRANDO PEDIDO...'}
+ const oldHtml=finishButton?.innerHTML||'';
+ if(finishButton){
+  finishButton.disabled=true;
+  finishButton.innerHTML='<i class="fa-solid fa-spinner fa-spin"></i> Registrando pedido...';
+ }
+
+ // Se abre una pestaña durante el clic para evitar el bloqueo de ventanas emergentes en PC.
+ let popup=null;
+ try{
+  popup=window.open('about:blank','roy_whatsapp_order');
+  if(popup&&!popup.closed){
+   popup.document.open();
+   popup.document.write('<!doctype html><html><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Pedido ROY</title></head><body style="margin:0;display:grid;place-items:center;min-height:100vh;background:#080808;color:#d4af37;font:700 15px Arial;text-align:center"><div>Registrando tu pedido...<br><small style="color:#fff;font-weight:400">No cierres esta ventana.</small></div></body></html>');
+   popup.document.close();
+  }
+ }catch(_){popup=null}
+
  try{
   await saveRoyOrderToFirebase(order);
+  toast(`Pedido ${orderId} registrado. Abriendo WhatsApp...`);
+  // Limpiar únicamente después de confirmar la escritura.
   resetRoyCheckoutForNextPurchase();
-  toast(`Pedido ${orderId} registrado correctamente.`);
-  if(popup&&!popup.closed)popup.location.replace(url);
-  else window.location.href=url;
+  if(popup&&!popup.closed){
+   popup.location.href=url;
+  }else{
+   // En celular y en navegadores que bloqueen pestañas, usar la pestaña actual.
+   window.location.assign(url);
+  }
  }catch(err){
   console.error('ROY guardar pedido:',err);
   if(popup&&!popup.closed)popup.close();
   toast('NO SE REGISTRÓ EL PEDIDO: '+(err?.message||'Revisa tu conexión y las reglas de Firebase.'));
+  // El carrito y los datos permanecen para que el cliente pueda volver a intentar.
  }finally{
   royOrderSaving=false;
-  if(finishButton){finishButton.disabled=false;finishButton.textContent=oldText||'Finalizar por WhatsApp'}
+  if(finishButton){
+   finishButton.disabled=false;
+   finishButton.innerHTML=oldHtml||'<i class="fa-brands fa-whatsapp"></i> Finalizar todo por WhatsApp';
+  }
  }
 };
 state.cart=loadRoyCart();
